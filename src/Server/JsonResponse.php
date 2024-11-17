@@ -15,7 +15,20 @@ namespace MessageBroker\Server;
  */
 class JsonResponse
 {
-    public function __construct(private array $data, private int $code = 200)
+    public const CODE_OK = 200;
+    public const CODE_ACCEPTED = 202;
+    public const CODE_NO_CONTENT = 204;
+    
+    public const CODE_MOVED_PERMANENTLY = 301;
+
+    public const CODE_BAD_REQUEST = 400;
+    public const CODE_UNAUTHORIZED = 401;
+    public const CODE_FORBIDDEN = 403;
+    public const CODE_NOT_FOUND = 404;
+
+    public const CODE_ERROR = 500;
+
+    public function __construct(private array $data, private int $code = self::CODE_OK)
     {
     }
 

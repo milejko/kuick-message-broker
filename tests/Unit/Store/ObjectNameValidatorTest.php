@@ -29,6 +29,7 @@ class ObjectNameValidatorTest extends \PHPUnit\Framework\TestCase
         self::assertTrue($v->isValid('why-not-some-digits-123456789'));
         self::assertTrue($v->isValid('_strange_but_why.not-666'));
         self::assertTrue($v->isValid('john@travolta.com'));
+        self::assertTrue($v->isValid('admin@xUjJhsf5ty7OpLL'));
     }
 
     public function testIfJunkIsNotPassedByTheValidator(): void

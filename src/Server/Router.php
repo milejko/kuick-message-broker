@@ -23,22 +23,32 @@ class Router
     {
         try {
             $route = $this->findRoute($request);
-        } catch (Throwable $t) {
-            return new JsonErrorResponse($t->getMessage(), 500);
-        }
-        if (!$route) {
-            return new JsonErrorResponse('Route not found', 404);
-        }
-        //execute guard
-        if (isset($route['guard']) && $route['guard']) {
-            try {
-                (new $route['guard'])->__invoke($request);
-            } catch (Throwable $t) {
-                return new JsonErrorResponse($t->getMessage(), 401);
+            if (!$route) {
+                throw new RouterException('Not found');
             }
+            //execute guard
+            if (isset($route['guard']) && $route['guard']) {
+                $guard = new $route['guard'];
+                if (!($guard instanceof Guard)) {
+                    throw new RouterException('Router failed: invalid ' . $route['guard'] . ' implementation');
+                }
+                $guard->__invoke($request);
+            }
+            $action = new $route['action'];
+            if (!($action instanceof Action)) {
+                throw new RouterException('Router failed: invalid ' . $route['action'] . ' implementation');
+            }
+            //execute action
+            return $action->__invoke($request);
+        } catch(RouterException $error) {
+            return new JsonErrorResponse($error->getMessage(), JsonResponse::CODE_NOT_FOUND);
+        } catch (GuardException $error) {
+            return new JsonErrorResponse($error->getMessage(), JsonResponse::CODE_UNAUTHORIZED);
+        } catch(ActionException $error) {
+            return new JsonErrorResponse($error->getMessage(), JsonResponse::CODE_BAD_REQUEST);
+        } catch (Throwable $error) {
+            return new JsonErrorResponse($error->getMessage(), JsonResponse::CODE_ERROR);
         }
-        //execute action
-        return (new $route['action'])->__invoke($request);
     }
 
     private function findRoute(Request $request): ?array

@@ -1,7 +1,9 @@
 <?php
 
+use MessageBroker\Server\Actions\ApiAckAction;
+use MessageBroker\Server\Actions\ApiAckMessageAction;
 use MessageBroker\Server\Actions\ApiGetMessagesAction;
-use MessageBroker\Server\Actions\ApiPublishAction;
+use MessageBroker\Server\Actions\ApiPublishMessageAction;
 use MessageBroker\Server\Actions\DefaultAction;
 use MessageBroker\Server\Guards\ApiGuard;
 
@@ -20,13 +22,13 @@ return [
     [
         "method" => "POST",
         "path" => "/api/message",
-        "action" => ApiPublishAction::class,
+        "action" => ApiPublishMessageAction::class,
         "guard" => ApiGuard::class,
     ],
     [
         "method" => "PUT",
-        "path" => "/api/message",
-        "action" => ApiPublishAction::class,
+        "path" => "/api/message/ack",
+        "action" => ApiAckMessageAction::class,
         "guard" => ApiGuard::class,
     ],
 ];

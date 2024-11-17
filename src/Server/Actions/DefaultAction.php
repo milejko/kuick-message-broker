@@ -19,8 +19,10 @@ use MessageBroker\Server\Request;
  */
 class DefaultAction implements Action
 {
+    private const DEFAULT_RESPONSE = ['status' => 'ok'];
+
     public function __invoke(Request $request): JsonResponse
     {
-        return new JsonResponse(['status' => 'ok']);
+        return new JsonResponse(self::DEFAULT_RESPONSE);
     }
 }

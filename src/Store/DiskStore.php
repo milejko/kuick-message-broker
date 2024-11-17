@@ -37,29 +37,39 @@ class DiskStore implements StoreInterface
     
     public function getMessages(string $userToken, string $channel): array
     {
-        if (!(new ObjectNameValidator)->isValid($userToken)) {
+        if (!(new ObjectNameValidator)->isValid($userToken) || !(new ObjectNameValidator)->isValid($channel)) {
             throw new StoreException();
         }
         $messages = [];
         foreach (glob($this->getMessagesFolder($channel). self::MESSAGE_PREFIX . '*') as $messageFile) {
-            if (file_exists($this->getAckFolder($channel) . basename($messageFile) . '-' . $userToken)) {
+            if (file_exists($this->getAcksFolder($channel) . basename($messageFile) . '-' . $userToken)) {
                 continue;
             }
             $messageId = explode('-', basename($messageFile))[1];
+            $ttl = explode('-', basename($messageFile))[2];
+            if (filemtime($messageFile) < time() - $ttl) {
+                continue;
+            }
             $messages[$messageId] = file_get_contents($messageFile);
         }
         return $messages;
     }
 
-    public function ack(string $userToken, string $channel, string $messageId): void
+    public function ack(string $userToken, string $channel, string $messageId): bool
     {
         if (!(new ObjectNameValidator)->isValid($userToken)) {
             throw new StoreException();
         }
         $fileName = $this->getMessagesFolder($channel) . sprintf(self::MESSAGE_FILENAME_TEMPLATE, $messageId, '*');
         foreach (glob($fileName) as $messageFile) {
-            file_put_contents($this->getAckFolder($channel) . basename($messageFile) . '-' . $userToken, '');
+            $ackFileName = $this->getAcksFolder($channel) . basename($messageFile) . '-' . $userToken;
+            if (file_exists($ackFileName)) {
+                return false;
+            }
+            file_put_contents($ackFileName, '');
+            return true;
         }
+        return false;
     }
 
     public function gc(string $channel): void
@@ -70,7 +80,7 @@ class DiskStore implements StoreInterface
                 continue;
             }
             unlink($messageFile);
-            foreach (glob($this->getAckFolder($channel) . basename($messageFile) . '*') as $ackFile) {
+            foreach (glob($this->getAcksFolder($channel) . basename($messageFile) . '*') as $ackFile) {
                 unlink($ackFile);
             }
         }
@@ -85,7 +95,7 @@ class DiskStore implements StoreInterface
         return $dirName;
     }
 
-    private function getAckFolder(string $channel): string
+    private function getAcksFolder(string $channel): string
     {
         $dirName = self::ACK_FOLDER . '/' . $channel . '/';
         if (!file_exists($dirName)) {
@@ -96,6 +106,6 @@ class DiskStore implements StoreInterface
 
     private function generateMessageId(): string
     {
-        return md5(microtime() . rand(0, 10000));
+        return md5(self::MESSAGES_FOLDER . microtime() . mt_rand());
     }
 }

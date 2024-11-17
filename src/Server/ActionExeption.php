@@ -8,11 +8,10 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace MessageBroker\Store;
+namespace MessageBroker\Server;
 
 use Exception;
 
-class StoreException extends Exception
+class ActionException extends Exception
 {
-    protected $message = 'Invalid channel or userToken. 2-40 alphanumeric characters and \'. - _ @\' are allowed.';
 }

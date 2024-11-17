@@ -15,7 +15,7 @@ namespace MessageBroker\Server;
  */
 class JsonErrorResponse extends JsonResponse
 {
-    public function __construct(private string $message = 'Internal server error', private int $code = 500)
+    public function __construct(private string $message, private int $code = self::CODE_ERROR)
     {
         parent::__construct(['message' => $message], $code);
     }

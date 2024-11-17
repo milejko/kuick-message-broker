@@ -14,9 +14,6 @@ use MessageBroker\Server\Guard;
 use MessageBroker\Server\GuardException;
 use MessageBroker\Server\Request;
 
-/**
- * 
- */
 class ApiGuard implements Guard
 {
     private const DEFAULT_OPERATOR_TOKEN = 'admin@xUjJhsf5ty7OpLL';

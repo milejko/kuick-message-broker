@@ -15,11 +15,11 @@ namespace MessageBroker\Store;
  */
 class ObjectNameValidator
 {
-    private const PATTERN = '/^[a-z0-9\-\._@]{2,40}$/';
+    private const PATTERN = '/^[a-z0-9\-\.\_\@]{2,40}$/i';
 
-    public function isValid(string $channel): bool
+    public function isValid(string $value): bool
     {
-        if (preg_match(self::PATTERN, $channel)) {
+        if (preg_match(self::PATTERN, $value)) {
             return true;
         }
         return false;
