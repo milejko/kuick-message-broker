@@ -21,20 +21,20 @@ class DiskStoreTest extends \PHPUnit\Framework\TestCase
     public function testIfStandardFlowWorksCorrectly(): void
     {
         $dm = new DiskStore();
-        $userName = 'john-doe@my_very_secret.1789';
+        $userToken = 'john-doe@my_very_secret.1789';
         $channel = 'sample-channel';
 
         $messageId = $dm->publish($channel, 'sample message', 60);
         self::assertNotEmpty($messageId);
 
-        $messages = $dm->getMessages($userName, $channel);
+        $messages = $dm->getMessages($userToken, $channel);
         self::assertNotEmpty($messages);
 
         foreach ($messages as $messageId => $messageContents) {
             self::assertEquals('sample message', $messageContents);
-            $dm->ack($userName, $channel, $messageId);
+            $dm->ack($userToken, $channel, $messageId);
         }
-        self::assertEquals([], $dm->getMessages($userName, $channel));
+        self::assertEquals([], $dm->getMessages($userToken, $channel));
     }
 
     public function testIfBrokenChannelNameCanNotBeUsed(): void
@@ -45,11 +45,41 @@ class DiskStoreTest extends \PHPUnit\Framework\TestCase
         $dm->publish('invalid-characters-in-channel()', '', 60);
     }
 
-    public function testIfBrokenUserNameCanNotBeUsed(): void
+    public function testIfBrokenuserTokenCanNotBeUsed(): void
     {
         $dm = new DiskStore();
 
         $this->expectException(StoreException::class);
         $dm->getMessages('broken-user-name^&)', 'some-channel');
+    }
+
+    public function testIfAutoAckWorks(): void
+    {
+        $dm = new DiskStore();
+        $userToken = 'jane-doe@my_very_secret.1789';
+        $channel = 'another-channel';
+
+        $messageId = $dm->publish($channel, 'sample message', 60);
+        self::assertNotEmpty($messageId);
+
+        $messages = $dm->getMessages($userToken, $channel, true);
+        self::assertNotEmpty($messages);
+    }
+
+    public function testIfOneSecondMessageLivesLessThan2Seconds(): void
+    {
+        $dm = new DiskStore();
+        $userToken = 'jack-doe@my_very_secret.1789';
+        $channel = 'yet-another-channel';
+
+        $messageId = $dm->publish($channel, 'sample message', 1);
+        self::assertNotEmpty($messageId);
+
+        $messages = $dm->getMessages($userToken, $channel, false);
+        self::assertNotEmpty($messages);
+        sleep(1);
+
+        $messages = $dm->getMessages($userToken, $channel, false);
+        self::assertNotEmpty($messages);
     }
 }

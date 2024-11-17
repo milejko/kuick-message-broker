@@ -11,7 +11,7 @@
 namespace MessageBroker\Store;
 
 /**
- * Validates object (like channel and userName)
+ * Validates object (like channel and userToken)
  */
 class ObjectNameValidator
 {

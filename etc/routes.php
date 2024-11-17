@@ -1,22 +1,28 @@
 <?php
 
-use MessageBroker\Server\Actions\ApiAckAction;
 use MessageBroker\Server\Actions\ApiAckMessageAction;
+use MessageBroker\Server\Actions\ApiGetMessageAction;
 use MessageBroker\Server\Actions\ApiGetMessagesAction;
 use MessageBroker\Server\Actions\ApiPublishMessageAction;
-use MessageBroker\Server\Actions\DefaultAction;
+use MessageBroker\Server\Actions\RootAction;
 use MessageBroker\Server\Guards\ApiGuard;
 
 return [
     [
         "method" => "GET",
         "path" => "/",
-        "action" => DefaultAction::class,
+        "action" => RootAction::class,
     ],
     [
         "method" => "GET",
         "path" => "/api/messages",
         "action" => ApiGetMessagesAction::class,
+        "guard" => ApiGuard::class,
+    ],
+    [
+        "method" => "GET",
+        "path" => "/api/message",
+        "action" => ApiGetMessageAction::class,
         "guard" => ApiGuard::class,
     ],
     [

@@ -12,7 +12,7 @@ namespace MessageBroker\Store;
 
 use Exception;
 
-class StoreException extends Exception
+class ValidationException extends Exception
 {
-    protected $message = 'Invalid channel or userToken. 2-40 alphanumeric characters and \'. - _ @\' are allowed.';
+    protected $message = 'Validation error';
 }

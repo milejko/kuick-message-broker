@@ -21,24 +21,27 @@ class DiskStore implements StoreInterface
     private const ACK_FOLDER = BASE_PATH . '/var/ack';
     private const GC_DIVISOR = 100;
 
-    public function publish(string $channel, string $message, int $ttl = 60): string
+    public function publish(string $channel, string $message, int $ttl = 300): string
     {
         if (!(new ObjectNameValidator)->isValid($channel)) {
-            throw new StoreException();
+            throw new ValidationException('Channel name invalid');
         }
         if (0 == rand(0, self::GC_DIVISOR)) {
             $this->gc($channel);
         }
         $messageId = $this->generateMessageId();
-        $fileName = $this->getMessagesFolder($channel) . sprintf(self::MESSAGE_FILENAME_TEMPLATE, $messageId, $ttl);
-        file_put_contents($fileName, $message);
+        $messageFile = $this->getMessagesFolder($channel) . sprintf(self::MESSAGE_FILENAME_TEMPLATE, $messageId, $ttl);
+        file_put_contents($messageFile, $message);
         return $messageId;
     }
     
     public function getMessages(string $userToken, string $channel): array
     {
-        if (!(new ObjectNameValidator)->isValid($userToken) || !(new ObjectNameValidator)->isValid($channel)) {
-            throw new StoreException();
+        if (!(new ObjectNameValidator)->isValid($userToken)) {
+            throw new ValidationException('User token invalid format');
+        }
+        if (!(new ObjectNameValidator)->isValid($channel)) {
+            throw new ValidationException('Chanel name invalid');
         }
         $messages = [];
         foreach (glob($this->getMessagesFolder($channel). self::MESSAGE_PREFIX . '*') as $messageFile) {
@@ -47,36 +50,66 @@ class DiskStore implements StoreInterface
             }
             $messageId = explode('-', basename($messageFile))[1];
             $ttl = explode('-', basename($messageFile))[2];
-            if (filemtime($messageFile) < time() - $ttl) {
+            $timeCreated = filectime($messageFile);
+            if ($timeCreated < time() - $ttl) {
                 continue;
             }
-            $messages[$messageId] = file_get_contents($messageFile);
+            $messages[] = ['messageId' => $messageId, 'created' => date('Y-m-d H:i:s', $timeCreated), 'ttl' => $ttl];
         }
         return $messages;
     }
 
-    public function ack(string $userToken, string $channel, string $messageId): bool
+    public function getMessage(string $userToken, string $messageId, string $channel, $autoack = false): array
+    {
+        if (!(new ObjectNameValidator)->isValid($userToken) || !(new ObjectNameValidator)->isValid($channel)) {
+            throw new ValidationException('Chanel name invalid');
+        }
+        if (32 != strlen($messageId)) {
+            throw new ValidationException('Message ID is invalid');
+        }
+        foreach (glob($this->getMessagesFolder($channel). sprintf(self::MESSAGE_FILENAME_TEMPLATE, $messageId, '*')) as $messageFile) {
+            if (file_exists($this->getAcksFolder($channel) . basename($messageFile) . '-' . $userToken)) {
+                throw new NotFoundException();
+            }
+            $messageId = explode('-', basename($messageFile))[1];
+            $ttl = explode('-', basename($messageFile))[2];
+            $timeCreated = filectime($messageFile);
+            if ($timeCreated < time() - $ttl) {
+                throw new NotFoundException();
+            }
+            $message = file_get_contents($messageFile);
+            if ($autoack) {
+                $this->ack($userToken, $channel, $messageId);
+            }
+            return ['message' => $message, 'messageId' => $messageId, 'created' => date('Y-m-d H:i:s', $timeCreated), 'ttl' => $ttl];
+        }
+        throw new NotFoundException();
+    }
+
+    public function ack(string $userToken, string $channel, string $messageId): void
     {
         if (!(new ObjectNameValidator)->isValid($userToken)) {
-            throw new StoreException();
+            throw new ValidationException('User token invalid format');
         }
-        $fileName = $this->getMessagesFolder($channel) . sprintf(self::MESSAGE_FILENAME_TEMPLATE, $messageId, '*');
-        foreach (glob($fileName) as $messageFile) {
+        if (32 != strlen($messageId)) {
+            throw new ValidationException('Message ID is invalid');
+        }
+        foreach (glob($this->getMessagesFolder($channel) . sprintf(self::MESSAGE_FILENAME_TEMPLATE, $messageId, '*')) as $messageFile) {
             $ackFileName = $this->getAcksFolder($channel) . basename($messageFile) . '-' . $userToken;
             if (file_exists($ackFileName)) {
-                return false;
+                throw new NotFoundException();
             }
             file_put_contents($ackFileName, '');
-            return true;
+            return;
         }
-        return false;
+        throw new NotFoundException();
     }
 
     public function gc(string $channel): void
     {
         foreach (glob($this->getMessagesFolder($channel) . self::MESSAGE_PREFIX . '*') as $messageFile) {
             $ttl = substr($messageFile, strrpos($messageFile, '-') + 1);
-            if (filemtime($messageFile) > time() - $ttl) {
+            if (filectime($messageFile) > time() - $ttl) {
                 continue;
             }
             unlink($messageFile);

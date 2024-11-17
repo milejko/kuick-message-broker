@@ -12,7 +12,8 @@ namespace MessageBroker\Store;
 
 interface StoreInterface
 {
-    public function publish(string $channel, string $message, int $ttl = 60): string;
-    public function getMessages(string $userName, string $channel): array;
-    public function ack(string $userName, string $channel, string $messageId): bool;
+    public function publish(string $channel, string $message, int $ttl = 300): string;
+    public function getMessages(string $userToken, string $channel): array;
+    public function getMessage(string $userToken, string $messageId, string $channel): array;
+    public function ack(string $userToken, string $channel, string $messageId): void;
 }

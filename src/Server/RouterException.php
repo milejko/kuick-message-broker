@@ -14,4 +14,5 @@ use Exception;
 
 class RouterException extends Exception
 {
+    protected $code = JsonErrorResponse::CODE_NOT_FOUND;
 }

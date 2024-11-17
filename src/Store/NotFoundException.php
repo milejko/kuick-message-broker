@@ -8,11 +8,11 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace MessageBroker\Server;
+namespace MessageBroker\Store;
 
 use Exception;
 
-class GuardException extends Exception
+class NotFoundException extends Exception
 {
-    protected $code = JsonErrorResponse::CODE_UNAUTHORIZED;
+    protected $message = 'Message not found';
 }

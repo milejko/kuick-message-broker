@@ -18,31 +18,28 @@ use MessageBroker\Store\DiskStore;
 use MessageBroker\Store\NotFoundException;
 use MessageBroker\Store\ValidationException;
 
-class ApiAckMessageAction implements Action
+class ApiGetMessageAction implements Action
 {
     public function __invoke(Request $request): JsonResponse
     {
         if (!isset($request->query['channel'])) {
             throw new ActionException('Query params must contain a channel name');
         }
+        if (!isset($request->query['messageId'])) {
+            throw new ActionException('Query params must contain a messageId');
+        }
         try {
-            (new DiskStore())->ack(
-                $request->getHeader('X-User-Token'),
+            $message = (new DiskStore())->getMessage(
+                $request->getHeader('x-user-token'),
+                $request->query['messageId'],
                 $request->query['channel'],
-                $request->query['messageId']
+                isset($request->query['autoack']) ? true : false
             );
         } catch (ValidationException $error) {
             throw new ActionException($error->getMessage());
         } catch (NotFoundException $error) {
             throw new ActionException($error->getMessage(), JsonResponse::CODE_NOT_FOUND);
         }
-        return new JsonResponse(
-            [
-                'success' => true,
-                'messageId' => $request->query['messageId'],
-                'channel' => $request->query['channel'],
-            ],
-            JsonResponse::CODE_ACCEPTED
-        );
+        return new JsonResponse($message);
     }
 }

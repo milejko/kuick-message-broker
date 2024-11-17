@@ -21,7 +21,7 @@ class ApiGetMessagesAction implements Action
     public function __invoke(Request $request): JsonResponse
     {
         if (!isset($request->query['channel'])) {
-            throw new ActionException('Query is missing a channel name');
+            throw new ActionException('Query params must contain a channel name');
         }
         return new JsonResponse(
             (new DiskStore())->getMessages(

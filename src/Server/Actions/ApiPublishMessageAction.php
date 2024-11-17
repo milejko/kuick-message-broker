@@ -18,7 +18,7 @@ use MessageBroker\Store\DiskStore;
 
 class ApiPublishMessageAction implements Action
 {
-    private const DEFAULT_MESSAGE_TTL = 60;
+    private const DEFAULT_MESSAGE_TTL = 300;
 
     public function __invoke(Request $request): JsonResponse
     {
@@ -36,7 +36,8 @@ class ApiPublishMessageAction implements Action
                 'messageId' => $messageId,
                 'channel' => $request->query['channel'],
                 'ttl' => $ttl
-            ]
+            ],
+            JsonResponse::CODE_ACCEPTED
         );
     }
 }

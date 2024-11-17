@@ -41,13 +41,13 @@ class Router
             //execute action
             return $action->__invoke($request);
         } catch(RouterException $error) {
-            return new JsonErrorResponse($error->getMessage(), JsonResponse::CODE_NOT_FOUND);
+            return new JsonErrorResponse($error);
         } catch (GuardException $error) {
-            return new JsonErrorResponse($error->getMessage(), JsonResponse::CODE_UNAUTHORIZED);
+            return new JsonErrorResponse($error);
         } catch(ActionException $error) {
-            return new JsonErrorResponse($error->getMessage(), JsonResponse::CODE_BAD_REQUEST);
+            return new JsonErrorResponse($error);
         } catch (Throwable $error) {
-            return new JsonErrorResponse($error->getMessage(), JsonResponse::CODE_ERROR);
+            return new JsonErrorResponse($error);
         }
     }
 

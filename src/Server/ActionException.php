@@ -14,4 +14,5 @@ use Exception;
 
 class ActionException extends Exception
 {
+    protected $code = JsonResponse::CODE_BAD_REQUEST;
 }
