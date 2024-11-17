@@ -1,0 +1,8 @@
+composer.lock
+.phpunit*
+/.idea
+/.php*
+/vendor/
+*.build
+.DS_Store
+/public/build*
