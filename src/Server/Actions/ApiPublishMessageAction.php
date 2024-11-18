@@ -22,19 +22,16 @@ class ApiPublishMessageAction implements Action
 
     public function __invoke(Request $request): JsonResponse
     {
-        if (!isset($request->query['channel'])) {
-            throw new ActionException('Query is missing a channel name');
-        }
-        $ttl = isset($request->query['ttl']) ? (int) $request->query['ttl'] : self::DEFAULT_MESSAGE_TTL;
+        $ttl = (int) $request->getQueryParam('ttl') > 0 ? (int) $request->getQueryParam('ttl') : self::DEFAULT_MESSAGE_TTL;
         $messageId = (new DiskStore())->publish(
-            $request->query['channel'],
-            $request->getPayload(),
+            $request->getQueryParam('channel'),
+            $request->body,
             $ttl
         );
         return new JsonResponse(
             [
                 'messageId' => $messageId,
-                'channel' => $request->query['channel'],
+                'channel' => $request->getQueryParam('channel'),
                 'ttl' => $ttl
             ],
             JsonResponse::CODE_ACCEPTED

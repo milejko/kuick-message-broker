@@ -20,13 +20,10 @@ class ApiGetMessagesAction implements Action
 {
     public function __invoke(Request $request): JsonResponse
     {
-        if (!isset($request->query['channel'])) {
-            throw new ActionException('Query params must contain a channel name');
-        }
         return new JsonResponse(
             (new DiskStore())->getMessages(
                 $request->getHeader('x-user-token'),
-                $request->query['channel']
+                $request->getQueryParam('channel')
             )
         );
     }

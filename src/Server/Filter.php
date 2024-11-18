@@ -10,8 +10,10 @@
 
 namespace MessageBroker\Server;
 
-use Exception;
-
-class RouterException extends Exception
+/**
+ * 
+ */
+interface Filter
 {
+    public function __invoke(Request $request): void;
 }

@@ -18,7 +18,7 @@ class DiskStore implements StoreInterface
     private const MESSAGE_PREFIX = 'msg-';
     private const MESSAGE_FILENAME_TEMPLATE = self::MESSAGE_PREFIX . '%s-%s';
     private const MESSAGES_FOLDER = BASE_PATH . '/var/messages';
-    private const ACK_FOLDER = BASE_PATH . '/var/ack';
+    private const ACK_FOLDER = BASE_PATH . '/var/acks';
     private const GC_DIVISOR = 100;
 
     public function publish(string $channel, string $message, int $ttl = 300): string
@@ -59,7 +59,7 @@ class DiskStore implements StoreInterface
         return $messages;
     }
 
-    public function getMessage(string $userToken, string $messageId, string $channel, $autoack = false): array
+    public function getMessage(string $userToken, string $channel, string $messageId, $autoack = false): array
     {
         if (!(new ObjectNameValidator)->isValid($userToken) || !(new ObjectNameValidator)->isValid($channel)) {
             throw new ValidationException('Chanel name invalid');

@@ -11,6 +11,7 @@
 namespace MessageBroker;
 
 use MessageBroker\Client\JsonClient;
+use MessageBroker\Server\Request;
 
 /**
  * 
@@ -35,7 +36,14 @@ class Client
 
     public function publish(string $channel, string $message, int $ttl = 300): array
     {
-        return (new JsonClient)->post($this->apiAddress . '/api/messages?channel=' . $channel . '&ttl=' . $ttl, ['X-User-Token' => $this->userToken], $message);
+        $request = (new Request())
+            ->withUri($this->apiAddress . '/api/messages')
+            ->withHeader('X-User-Token', $this->userToken)
+            ->withMethod(Request::METHOD_POST)
+            ->withBody($message)
+            ->withQueryParam('channel', $channel)
+            ->withQueryParam('ttl', $ttl);
+        return (new JsonClient)->query($request);
     }
 
     public function consume(string $channel, callable $callback): void

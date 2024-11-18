@@ -12,14 +12,10 @@ namespace MessageBroker\Server;
 
 use Throwable;
 
-/**
- * 
- */
 class JsonErrorResponse extends JsonResponse
 {
     public function __construct(Throwable $error)
     {
-        $code = $error->getCode() == 0 ? self::CODE_ERROR : $error->getCode();
-        parent::__construct(['error' => $error->getMessage()], $code);
+        parent::__construct(['error' => $error->getMessage()], self::CODE_ERROR);
     }
 }

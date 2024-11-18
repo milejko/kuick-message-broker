@@ -12,6 +12,6 @@ namespace MessageBroker\Server;
 
 use Exception;
 
-class RouterException extends Exception
+class RequestException extends Exception
 {
 }

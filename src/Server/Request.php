@@ -15,61 +15,94 @@ namespace MessageBroker\Server;
  */
 class Request
 {
-    private const HTTP_HEADER_PREFIX = 'HTTP_';
+    public const METHOD_GET = 'GET';
+    public const METHOD_POST = 'POST';
+    public const METHOD_PUT = 'PUT';
+    public const METHOD_PATCH = 'PATCH';
+    public const METHOD_HEAD = 'HEAD';
+    public const METHOD_DELETE = 'DELETE';
+    public const METHOD_OPTIONS = 'OPTIONS';
 
-    public readonly string $host;
-    public readonly string $method;
-    public readonly string $uri;
-    public readonly string $path;
-    public readonly array $query;
+    public string $method;
+    public string $uri;
+    public string $path;
+    public string $body;
 
     private array $headers = [];
+    private array $queryParams = [];
 
-    public function __construct(private array $serverVariables, private string $input)
+    public function withMethod(string $method): self
     {
-        $this->host = $this->get('HTTP_HOST');
-        $this->method = $this->get('REQUEST_METHOD', 'GET');
-        $this->uri = $this->get('REQUEST_URI');
-
-        //path & query
-        $parsedUrl = parse_url($this->uri);
-        $query = [];
-        isset($parsedUrl['query']) ? parse_str($parsedUrl['query'], $query) : [];
-        $this->path = isset($parsedUrl['path']) ? ($parsedUrl['path'] == '/' ? $parsedUrl['path'] : rtrim($parsedUrl['path'], '/')) : '';
-        $this->query = $query;
-
-        //headers
-        foreach ($serverVariables as $name => $value) {
-            if (!str_starts_with($name, self::HTTP_HEADER_PREFIX)) {
-                continue;
-            }
-            $this->headers[strtolower(str_replace('_', '-', substr($name, strlen(self::HTTP_HEADER_PREFIX))))] = $value;
+        $availableMethods = [
+            self::METHOD_GET,
+            self::METHOD_POST,
+            self::METHOD_DELETE,
+            self::METHOD_HEAD,
+            self::METHOD_PUT,
+            self::METHOD_PATCH,
+            self::METHOD_OPTIONS,
+        ];
+        if (!in_array($method, $availableMethods)) {
+            throw new RequestException();
         }
+        $this->method = $method;
+        return $this;
     }
 
-    public function getPayload(): string
+    public function withUri(string $uri): self
     {
-        return $this->input;
+        $this->uri = $uri;
+        $parsedUrl = parse_url($this->uri);
+        isset($parsedUrl['query']) ? parse_str($parsedUrl['query'], $queryParams) : [];
+        $this->queryParams = is_array($queryParams) ? $queryParams : [];
+        $this->path = isset($parsedUrl['path']) ? ($parsedUrl['path'] == '/' ? $parsedUrl['path'] : rtrim($parsedUrl['path'], '/')) : '';
+        return $this;
     }
 
-    public function getPayloadAsArray(): array
+    public function withBody(string $body): self
     {
-        parse_str($this->input, $output);
-        return $output;
+        $this->body = $body;
+        return $this;
+    }
+
+    public function withHeader(string $name, string $value): self
+    {
+        $this->headers[$name] = $value;
+        return $this;
+    }
+
+    public function withQueryParam(string $name, string $value): self
+    {
+        $this->queryParams[$name] = $value;
+        return $this;
+    }
+
+    public function getHeaders(): array
+    {
+        $headers = [];
+        foreach ($this->getHeaders() as $headerName => $headerValue) {
+            $headers[] = $headerName . ': ' . $headerValue;
+        }
+        return $headers;
     }
 
     public function getHeader(string $name): string
     {
         foreach ($this->headers as $headerName => $value) {
-            if (strtolower($name) == $headerName) {
+            if (strtolower($name) == strtolower($headerName)) {
                 return $value;
             }
         }
         return '';
     }
 
-    private function get(string $key, string $default = ''): mixed
+    public function getQueryParams(): array
     {
-        return isset($this->serverVariables[$key]) ? $this->serverVariables[$key]: $default;
+        return $this->queryParams;
+    }
+
+    public function getQueryParam(string $name): ?string
+    {
+        return isset($this->queryParams[$name]) ? $this->queryParams[$name] : null;
     }
 }

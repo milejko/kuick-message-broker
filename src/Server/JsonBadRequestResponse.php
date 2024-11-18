@@ -10,8 +10,12 @@
 
 namespace MessageBroker\Server;
 
-use Exception;
+use Throwable;
 
-class RouterException extends Exception
+class JsonBadRequestResponse extends JsonResponse
 {
+    public function __construct(Throwable $error)
+    {
+        parent::__construct(['error' => $error->getMessage()], self::CODE_BAD_REQUEST);
+    }
 }

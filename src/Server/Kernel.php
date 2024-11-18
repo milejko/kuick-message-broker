@@ -28,7 +28,7 @@ class Kernel
         }
         $this->config = $config;
         $this->env =  $env;
-        $this->request = new Request($server, $input);
+        $this->request = new ServerRequest($server, $input);
         $this->router = new Router(
             (isset($this->config['routes.php']) && is_array($this->config['routes.php'])) ? $this->config['routes.php'] : []
         );

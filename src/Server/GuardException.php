@@ -14,5 +14,4 @@ use Exception;
 
 class GuardException extends Exception
 {
-    protected $code = JsonErrorResponse::CODE_UNAUTHORIZED;
 }

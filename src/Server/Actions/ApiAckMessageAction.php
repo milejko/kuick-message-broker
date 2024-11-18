@@ -11,36 +11,30 @@
 namespace MessageBroker\Server\Actions;
 
 use MessageBroker\Server\Action;
-use MessageBroker\Server\ActionException;
+use MessageBroker\Server\JsonNotFoundResponse;
 use MessageBroker\Server\JsonResponse;
 use MessageBroker\Server\Request;
 use MessageBroker\Store\DiskStore;
 use MessageBroker\Store\NotFoundException;
-use MessageBroker\Store\ValidationException;
 
 class ApiAckMessageAction implements Action
 {
     public function __invoke(Request $request): JsonResponse
     {
-        if (!isset($request->query['channel'])) {
-            throw new ActionException('Query params must contain a channel name');
-        }
         try {
             (new DiskStore())->ack(
                 $request->getHeader('X-User-Token'),
-                $request->query['channel'],
-                $request->query['messageId']
+                $request->getQueryParam('channel'),
+                $request->getQueryParam('messageId')
             );
-        } catch (ValidationException $error) {
-            throw new ActionException($error->getMessage());
         } catch (NotFoundException $error) {
-            throw new ActionException($error->getMessage(), JsonResponse::CODE_NOT_FOUND);
+            return new JsonNotFoundResponse($error);
         }
         return new JsonResponse(
             [
                 'success' => true,
-                'messageId' => $request->query['messageId'],
-                'channel' => $request->query['channel'],
+                'channel' => $request->getQueryParam('channel'),
+                'messageId' => $request->getQueryParam('messageId')
             ],
             JsonResponse::CODE_ACCEPTED
         );
