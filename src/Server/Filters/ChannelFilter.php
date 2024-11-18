@@ -21,6 +21,5 @@ class ChannelFilter implements Filter
         if (!$request->getQueryParam('channel')) {
             throw new FilterException('Query param "channel" is required');
         }
-        $request->withQueryParam('channel', 'hehe');
     }
 }

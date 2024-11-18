@@ -43,7 +43,7 @@ class Request
             self::METHOD_OPTIONS,
         ];
         if (!in_array($method, $availableMethods)) {
-            throw new RequestException();
+            throw new RequestException('Method invalid');
         }
         $this->method = $method;
         return $this;

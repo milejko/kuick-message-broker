@@ -10,14 +10,8 @@
 
 namespace MessageBroker\Server;
 
-/**
- * 
- */
-class JsonResponse extends Response
+use Exception;
+
+class ResponseException extends Exception
 {
-    public function __construct(private array $data, private int $code = self::CODE_OK)
-    {
-        $this->withHeader('Content-type', 'application/json', $this->code);
-        $this->withBody(json_encode($this->data));
-    }
 }
