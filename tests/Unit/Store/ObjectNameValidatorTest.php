@@ -1,16 +1,16 @@
 <?php
 
 /**
- * Message Broker
+ * Kuick Message Broker
  *
- * @link       https://github.com/milejko/message-broker.git
+ * @link       https://github.com/milejko/kuick-message-broker.git
  * @copyright  Copyright (c) 2024 Mariusz Miłejko (mariusz@milejko.pl)
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
 namespace Tests\MessageBroker\Store;
 
-use MessageBroker\Store\ObjectNameValidator;
+use Kuick\MessageBroker\Infrastructure\ObjectNameValidator;
 
 /**
  * Disk backed publisher

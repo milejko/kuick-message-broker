@@ -3,7 +3,10 @@ composer.lock
 /.idea
 /.php*
 /vendor/
-*.build
 .DS_Store
-/public/build*
+/bin/console
+/public/index.php
+/public/phpunit*
+/public/phpmetrics*
 /var
+version.*

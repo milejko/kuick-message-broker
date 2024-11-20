@@ -1,8 +1,8 @@
 {
-    "name": "mmi/message-broker",
+    "name": "kuick/message-broker",
     "type": "library",
-    "description": "Small, slim message broker",
-    "keywords": ["message broker", "framework"],
+    "description": "Small, slim message broker based on Kuick",
+    "keywords": ["message broker", "Kuick"],
     "license": "MIT",
     "authors": [
         {
@@ -21,7 +21,8 @@
         "ext-pcre": "*",
         "ext-pdo": "*",
         "ext-reflection": "*",
-        "ext-spl": "*"
+        "ext-spl": "*",
+        "kuick/framework": "*"
     },
     "scripts": {
         "fix:phpcbf": "phpcbf",
@@ -43,16 +44,22 @@
             "@test:phpmd",
             "@test:phpunit"
         ],
-        "generate:phpmd-baseline": "phpmd --generate-baseline ./src text phpmd.xml.dist"
+        "generate:phpmd-baseline": "phpmd --generate-baseline ./src text phpmd.xml.dist",
+        "post-install-cmd": [
+            "Kuick\\Composer\\ComposerInstaller::postInstall"
+        ],
+        "post-update-cmd": [
+            "Kuick\\Composer\\ComposerInstaller::postUpdate"
+        ]
     },
     "autoload": {
         "psr-4": {
-            "MessageBroker\\": "src"
+            "Kuick\\MessageBroker\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\MessageBroker\\": "tests"
+            "Tests\\Kuick\\MessageBroker\\": "tests"
         }
     },
     "extra": {
@@ -68,5 +75,6 @@
     },
     "require-dev": {
         "mmi/mmi-build-toolkit": "*"
-    }
+    },
+    "minimum-stability": "dev"
 }
