@@ -10,10 +10,10 @@
 
 namespace Kuick\MessageBroker\Api\UI;
 
-use Kuick\Http\JsonResponse;
-use Kuick\Http\Request;
 use Kuick\UI\ActionInterface;
 use Kuick\MessageBroker\Infrastructure\DiskStore;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class PostMessageAction implements ActionInterface
 {
@@ -21,19 +21,21 @@ class PostMessageAction implements ActionInterface
 
     public function __invoke(Request $request): JsonResponse
     {
-        $ttl = (int) $request->getQueryParam('ttl') > 0 ? (int) $request->getQueryParam('ttl') : self::DEFAULT_MESSAGE_TTL;
+        $ttl = (int) $request->query->get('ttl') > 0 ? (int) $request->query->get('ttl') : self::DEFAULT_MESSAGE_TTL;
+        $channel = $request->query->get('channel');
+
         $messageId = (new DiskStore())->publish(
-            $request->getQueryParam('channel'),
-            $request->getBody(),
+            $channel,
+            $request->getContent(),
             $ttl
         );
         return new JsonResponse(
             [
                 'messageId' => $messageId,
-                'channel' => $request->getQueryParam('channel'),
-                'ttl' => $ttl
+                'channel' => $channel,
+                'ttl' => $ttl,
             ],
-            JsonResponse::CODE_ACCEPTED
+            JsonResponse::HTTP_ACCEPTED
         );
     }
 }

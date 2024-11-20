@@ -76,5 +76,5 @@
     "require-dev": {
         "mmi/mmi-build-toolkit": "*"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "alpha"
 }

@@ -10,9 +10,9 @@
 
 namespace Kuick\MessageBroker\Shared\UI;
 
-use Kuick\Http\JsonResponse;
-use Kuick\Http\Request;
 use Kuick\UI\ActionInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class HomeAction implements ActionInterface
 {
@@ -21,7 +21,7 @@ class HomeAction implements ActionInterface
         'api' => [
             'publish message' => 'POST:/api/message?channel=news&ttl=3600',
             'get message list' => 'GET:/api/messages?channel=news',
-            'get message' => 'GET:/api/message?channel=news&messageId=some-id&autoack=false',
+            'get message' => 'GET:/api/message?channel=news&messageId=some-id&autoack=0',
             'ack message' => 'POST:/api/message/ack?channel=news&messageId=some-id'
         ]
     ];

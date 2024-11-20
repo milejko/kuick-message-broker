@@ -10,33 +10,37 @@
 
 namespace Kuick\MessageBroker\Api\UI;
 
-use Kuick\Http\HttpNotFoundException;
-use Kuick\Http\JsonResponse;
-use Kuick\Http\Request;
+use Kuick\MessageBroker\Api\Security\TokenGuard;
 use Kuick\UI\ActionInterface;
 use Kuick\MessageBroker\Infrastructure\DiskStore;
 use Kuick\MessageBroker\Infrastructure\NotFoundException;
+use Kuick\UI\UINotFoundException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class PostMessageAckAction implements ActionInterface
 {
     public function __invoke(Request $request): JsonResponse
     {
+        $channel = $request->query->get('channel');
+        $messageId = $request->query->get('messageId');
+        $userLabel = md5($request->headers->get(TokenGuard::TOKEN_HEADER));
         try {
             (new DiskStore())->ack(
-                $request->getHeader('X-User-Token'),
-                $request->getQueryParam('channel'),
-                $request->getQueryParam('messageId')
+                $userLabel,
+                $channel,
+                $messageId,
             );
         } catch (NotFoundException $error) {
-            throw new HttpNotFoundException($error->getMessage());
+            throw new UINotFoundException($error->getMessage());
         }
         return new JsonResponse(
             [
-                'success' => true,
-                'channel' => $request->getQueryParam('channel'),
-                'messageId' => $request->getQueryParam('messageId')
+                'acked' => true,
+                'channel' => $channel,
+                'messageId' => $messageId,
             ],
-            JsonResponse::CODE_ACCEPTED
+            JsonResponse::HTTP_ACCEPTED
         );
     }
 }
