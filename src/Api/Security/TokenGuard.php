@@ -14,7 +14,7 @@ use Kuick\Http\HttpForbiddenException;
 use Kuick\Http\Request;
 use Kuick\Security\GuardInterface;
 
-class ApiGuard implements GuardInterface
+class TokenGuard implements GuardInterface
 {
     private const DEFAULT_OPERATOR_TOKEN = 'admin@xUjJhsf5ty7OpLL';
 

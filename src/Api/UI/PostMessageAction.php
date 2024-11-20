@@ -15,7 +15,7 @@ use Kuick\Http\Request;
 use Kuick\UI\ActionInterface;
 use Kuick\MessageBroker\Infrastructure\DiskStore;
 
-class ApiPublishMessageAction implements ActionInterface
+class PostMessageAction implements ActionInterface
 {
     private const DEFAULT_MESSAGE_TTL = 300;
 

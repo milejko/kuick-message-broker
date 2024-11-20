@@ -15,7 +15,7 @@ use Kuick\Http\Request;
 use Kuick\UI\ActionInterface;
 use Kuick\MessageBroker\Infrastructure\DiskStore;
 
-class ApiGetMessagesAction implements ActionInterface
+class GetMessagesAction implements ActionInterface
 {
     public function __invoke(Request $request): JsonResponse
     {

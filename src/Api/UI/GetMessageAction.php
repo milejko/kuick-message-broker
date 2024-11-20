@@ -17,7 +17,7 @@ use Kuick\UI\ActionInterface;
 use Kuick\MessageBroker\Infrastructure\DiskStore;
 use Kuick\MessageBroker\Infrastructure\NotFoundException;
 
-class ApiGetMessageAction implements ActionInterface
+class GetMessageAction implements ActionInterface
 {
     public function __invoke(Request $request): JsonResponse
     {
