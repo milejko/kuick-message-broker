@@ -10,11 +10,10 @@
 
 namespace MessageBroker;
 
-use MessageBroker\Client\JsonClient;
-use MessageBroker\Server\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * 
+ *
  */
 class MessageBrokerClient
 {
@@ -36,20 +35,21 @@ class MessageBrokerClient
 
     public function publish(string $channel, string $message, int $ttl = 300): array
     {
-        $request = (new Request())
+        /*$request = (new Request())
             ->withUri($this->apiAddress . '/api/messages')
             ->withHeader('X-User-Token', $this->userToken)
             ->withMethod(Request::METHOD_POST)
             ->withBody($message)
             ->withQueryParam('channel', $channel)
             ->withQueryParam('ttl', $ttl);
-        return (new JsonClient)->query($request);
+        return (new JsonClient)->query($request);*/
+        return [];
     }
 
     public function consume(string $channel, callable $callback): void
     {
         while (true) {
-            usleep(self::READ_INTERVAL_MS * 1000);            
+            usleep(self::READ_INTERVAL_MS * 1000);
         }
     }
 }

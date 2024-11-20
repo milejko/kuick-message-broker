@@ -46,6 +46,5 @@ class ObjectNameValidatorTest extends \PHPUnit\Framework\TestCase
         self::assertFalse($v->isValid('invalid-characters-)'));
         self::assertFalse($v->isValid('invalid-characters-+'));
         self::assertFalse($v->isValid('loooooooooooooooooooooooooooooooooooooong'));
-
     }
 }

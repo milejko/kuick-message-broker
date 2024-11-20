@@ -28,7 +28,9 @@ class TokenGuard implements GuardInterface
     private const ERROR_INVALID_TOKEN = 'Token is invalid';
     private const ERROR_NO_CHANNEL_TOKENS = 'No tokens found for this channel';
 
-    public function __construct(private AppConfig $appConfig) {}
+    public function __construct(private AppConfig $appConfig)
+    {
+    }
 
     public function __invoke(Request $request): void
     {
