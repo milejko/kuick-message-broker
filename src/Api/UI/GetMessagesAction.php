@@ -15,14 +15,19 @@ use Kuick\Http\Request;
 use Kuick\MessageBroker\Api\Security\TokenGuard;
 use Kuick\UI\ActionInterface;
 use Kuick\MessageBroker\Infrastructure\DiskStore;
+use Kuick\MessageBroker\Infrastructure\StoreInterface;
 
 class GetMessagesAction implements ActionInterface
 {
+    public function __construct(private StoreInterface $store)
+    {
+    }
+
     public function __invoke(Request $request): JsonResponse
     {
         $userLabel = md5($request->headers->get(TokenGuard::TOKEN_HEADER));
         return new JsonResponse(
-            (new DiskStore())->getMessages(
+            $this->store->getMessages(
                 $userLabel,
                 $request->query->get('channel')
             )

@@ -16,16 +16,21 @@ use Kuick\MessageBroker\Api\Security\TokenGuard;
 use Kuick\UI\ActionInterface;
 use Kuick\MessageBroker\Infrastructure\DiskStore;
 use Kuick\MessageBroker\Infrastructure\NotFoundException;
+use Kuick\MessageBroker\Infrastructure\StoreInterface;
 
 class PostMessageAckAction implements ActionInterface
 {
+    public function __construct(private StoreInterface $store)
+    {
+    }
+
     public function __invoke(Request $request): JsonResponse
     {
         $channel = $request->query->get('channel');
         $messageId = $request->query->get('messageId');
         $userLabel = md5($request->headers->get(TokenGuard::TOKEN_HEADER));
         try {
-            (new DiskStore())->ack(
+            $this->store->ack(
                 $userLabel,
                 $channel,
                 $messageId,

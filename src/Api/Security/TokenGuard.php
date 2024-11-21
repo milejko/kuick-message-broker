@@ -19,7 +19,7 @@ use Kuick\Security\GuardInterface;
 
 class TokenGuard implements GuardInterface
 {
-    public const CHANNEL_TOKEN_CONFIG_KEY = 'kuick_message_broker_channel_tokens';
+    public const CHANNEL_TOKEN_CONFIG_KEY = 'kuick_mb_channel_tokens';
     public const TOKEN_HEADER = 'Authorization';
 
     private const BEARER_TOKEN_TEMPLATE = 'Bearer %s';
@@ -28,7 +28,9 @@ class TokenGuard implements GuardInterface
     private const ERROR_INVALID_TOKEN = 'Token is invalid';
     private const ERROR_NO_CHANNEL_TOKENS = 'No tokens found for this channel';
 
-    public function __construct(private AppConfig $appConfig) {}
+    public function __construct(private AppConfig $appConfig)
+    {
+    }
 
     public function __invoke(Request $request): void
     {

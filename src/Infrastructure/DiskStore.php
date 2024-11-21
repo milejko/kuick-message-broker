@@ -81,7 +81,7 @@ class DiskStore implements StoreInterface
             if ($autoack) {
                 $this->ack($userToken, $channel, $messageId);
             }
-            return ['message' => $message, 'messageId' => $messageId, 'created' => date('Y-m-d H:i:s', $timeCreated), 'ttl' => $ttl];
+            return ['message' => $message, 'messageId' => $messageId, 'created' => date('Y-m-d H:i:s', $timeCreated), 'ttl' => $ttl, 'acked' => $autoack];
         }
         throw new NotFoundException();
     }
