@@ -13,7 +13,7 @@ return [
     'kuick_ops_guards_token' => 'secure-token',
 
     //it allows user@pass (bearer token) to access "sample-channel" channel
-    'message_broker_channel_tokens' => [
+    'kuick_mb_channel_tokens' => [
         'sample-channel' => [
             'user@better-password-but-change-it-anyway',
         ],

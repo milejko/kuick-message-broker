@@ -8,13 +8,10 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Tests\MessageBroker\Store;
+namespace Tests\Kuick\MessageBroker\Store;
 
 use Kuick\MessageBroker\Infrastructure\ObjectNameValidator;
 
-/**
- * Disk backed publisher
- */
 class ObjectNameValidatorTest extends \PHPUnit\Framework\TestCase
 {
     public function testIfCorrectNamesAreValidatedCorrectly(): void
