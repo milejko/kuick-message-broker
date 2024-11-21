@@ -6,7 +6,6 @@ composer.lock
 .DS_Store
 /bin/console
 /public/index.php
-/public/phpunit*
-/public/phpmetrics*
+/public/build*
 /var
 version.*

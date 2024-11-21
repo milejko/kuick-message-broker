@@ -10,13 +10,12 @@
 
 namespace Kuick\MessageBroker\Api\UI;
 
+use Kuick\Http\JsonResponse;
+use Kuick\Http\Request;
 use Kuick\MessageBroker\Api\Security\TokenGuard;
 use Kuick\UI\ActionInterface;
 use Kuick\MessageBroker\Infrastructure\DiskStore;
 use Kuick\MessageBroker\Infrastructure\NotFoundException;
-use Kuick\UI\UINotFoundException;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 class GetMessageAction implements ActionInterface
 {
@@ -31,7 +30,7 @@ class GetMessageAction implements ActionInterface
                 ($request->query->get('autoack') === 'true' || $request->query->get('autoack') === '1'),
             );
         } catch (NotFoundException $error) {
-            throw new UINotFoundException($error->getMessage());
+            throw new NotFoundException($error->getMessage());
         }
         return new JsonResponse($message);
     }

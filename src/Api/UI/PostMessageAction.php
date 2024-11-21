@@ -10,10 +10,10 @@
 
 namespace Kuick\MessageBroker\Api\UI;
 
+use Kuick\Http\JsonResponse;
+use Kuick\Http\Request;
 use Kuick\UI\ActionInterface;
 use Kuick\MessageBroker\Infrastructure\DiskStore;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 class PostMessageAction implements ActionInterface
 {

@@ -10,8 +10,6 @@
 
 namespace MessageBroker;
 
-use Symfony\Component\HttpFoundation\Request;
-
 /**
  *
  */
