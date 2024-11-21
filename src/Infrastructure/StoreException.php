@@ -12,7 +12,6 @@
 
 use Exception;
 
-class NotFoundException extends Exception
+class StoreException extends Exception
 {
-    protected $message = 'Message not found';
 }

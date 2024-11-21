@@ -11,7 +11,7 @@
 namespace Tests\Kuick\MessageBroker\Store;
 
 use Kuick\MessageBroker\Infrastructure\APCUStore;
-use Kuick\MessageBroker\Infrastructure\NotFoundException;
+use Kuick\MessageBroker\Infrastructure\MessageNotFoundException;
 
 class APCUStoreTest extends \PHPUnit\Framework\TestCase
 {
@@ -64,7 +64,7 @@ class APCUStoreTest extends \PHPUnit\Framework\TestCase
         $messageId = $store->publish($channel, 'some message');
         self::assertEquals('some message', $store->getMessage($userToken, $channel, $messageId, true)['message']);
         self::assertEmpty($store->getMessages($userToken, $channel));
-        $this->expectException(NotFoundException::class);
+        $this->expectException(MessageNotFoundException::class);
         $store->getMessage($userToken, $channel, $messageId);
     }
 
@@ -79,7 +79,7 @@ class APCUStoreTest extends \PHPUnit\Framework\TestCase
         self::assertCount(1, $store->getMessages($userToken, $channel));
         $store->ack($userToken, $channel, $messageId);
         self::assertEmpty($store->getMessages($userToken, $channel));
-        $this->expectException(NotFoundException::class);
+        $this->expectException(MessageNotFoundException::class);
         $store->getMessage($userToken, $channel, $messageId);
     }
 }

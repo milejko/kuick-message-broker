@@ -1,10 +1,10 @@
 <?php
 
-use Kuick\MessageBroker\Infrastructure\DiskStore;
+use Kuick\MessageBroker\Infrastructure\FilesystemStore;
 use Kuick\MessageBroker\Infrastructure\StoreInterface;
 
 use function DI\autowire;
 
 return [
-    StoreInterface::class => autowire(DiskStore::class),
+    StoreInterface::class => autowire(FilesystemStore::class),
 ];

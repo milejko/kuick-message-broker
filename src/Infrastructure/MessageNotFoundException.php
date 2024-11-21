@@ -8,11 +8,9 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Kuick\MessageBroker\Infrastructure;
+ namespace Kuick\MessageBroker\Infrastructure;
 
-use Exception;
-
-class ValidationException extends Exception
+class MessageNotFoundException extends StoreException
 {
-    protected $message = 'Validation error';
+    protected $message = 'Message not found';
 }

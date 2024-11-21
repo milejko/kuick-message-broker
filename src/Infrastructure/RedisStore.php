@@ -98,10 +98,10 @@ class RedisStore implements StoreInterface
         return ['message' => $messageArray[0], 'messageId' => $messageArray[1], 'created' => date('Y-m-d H:i:s', $messageArray[2]), 'ttl' => $messageArray[3]];
     }
 
-    private function searchRedis(string $pattern): array
+    private function browseRedis(string $pattern): array
     {
         $data = [];
-        foreach (new \APCUIterator(sprintf(self::SEARCH_PATTERN_TEMPLATE, $pattern)) as $item) {
+        foreach (new RedisBrowser(sprintf(self::SEARCH_PATTERN_TEMPLATE, $pattern)) as $item) {
             $data[$item['key']] = $item['value'];
         }
         return $data;

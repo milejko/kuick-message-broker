@@ -10,17 +10,16 @@
 
 namespace Tests\Kuick\MessageBroker\Store;
 
-use Kuick\MessageBroker\Infrastructure\DiskStore;
-use Kuick\MessageBroker\Infrastructure\ValidationException;
+use Kuick\MessageBroker\Infrastructure\FilesystemStore;
 
 /**
  * Disk backed publisher
  */
-class DiskStoreTest extends \PHPUnit\Framework\TestCase
+class FilesystemStoreTest extends \PHPUnit\Framework\TestCase
 {
     public function testIfStandardFlowWorksCorrectly(): void
     {
-        $dm = new DiskStore();
+        $dm = new FilesystemStore();
         $userToken = 'john-doe@my_very_secret.1789';
         $channel = 'sample-channel';
 
@@ -30,7 +29,7 @@ class DiskStoreTest extends \PHPUnit\Framework\TestCase
         self::assertEquals('sample message', $dm->getMessage($userToken, $channel, $messageId)['message']);
         self::assertEquals($messageId, $dm->getMessage($userToken, $channel, $messageId)['messageId']);
         self::assertEquals(37, $dm->getMessage($userToken, $channel, $messageId)['ttl']);
-        self::assertArrayHasKey('created', $dm->getMessage($userToken, $channel, $messageId));
+        self::assertArrayHasKey('createTime', $dm->getMessage($userToken, $channel, $messageId));
 
         $messages = $dm->getMessages($userToken, $channel);
         self::assertNotEmpty($messages);
@@ -40,32 +39,16 @@ class DiskStoreTest extends \PHPUnit\Framework\TestCase
             self::assertEquals($messageId, $message['messageId']);
             self::assertEquals('sample message', $message['message']);
             self::assertEquals(37, $message['ttl']);
-            self::assertArrayHasKey('created', $message);
+            self::assertArrayHasKey('createTime', $message);
 
             $dm->ack($userToken, $channel, $messageId);
         }
         self::assertEquals([], $dm->getMessages($userToken, $channel));
     }
 
-    public function testIfBrokenChannelNameCanNotBeUsed(): void
-    {
-        $dm = new DiskStore();
-
-        $this->expectException(ValidationException::class);
-        $dm->publish('invalid-characters-in-channel()', '', 60);
-    }
-
-    public function testIfBrokenuserTokenCanNotBeUsed(): void
-    {
-        $dm = new DiskStore();
-
-        $this->expectException(ValidationException::class);
-        $dm->getMessages('broken-user-name^&)', 'some-channel');
-    }
-
     public function testIfAutoAckWorks(): void
     {
-        $dm = new DiskStore();
+        $dm = new FilesystemStore();
         $userToken = 'jane-doe@my_very_secret.1789';
         $channel = 'another-channel';
 
@@ -78,7 +61,7 @@ class DiskStoreTest extends \PHPUnit\Framework\TestCase
 
     public function testIfOneSecondMessageLivesLessThan2Seconds(): void
     {
-        $dm = new DiskStore();
+        $dm = new FilesystemStore();
         $userToken = 'jack-doe@my_very_secret.1789';
         $channel = 'yet-another-channel';
 

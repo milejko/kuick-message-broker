@@ -8,13 +8,12 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
- namespace Kuick\MessageBroker\Api\UI;
+namespace Kuick\MessageBroker\Api\UI;
 
 use Kuick\Http\JsonResponse;
 use Kuick\Http\Request;
 use Kuick\MessageBroker\Api\Security\TokenGuard;
 use Kuick\UI\ActionInterface;
-use Kuick\MessageBroker\Infrastructure\DiskStore;
 use Kuick\MessageBroker\Infrastructure\StoreInterface;
 
 class GetMessagesAction implements ActionInterface

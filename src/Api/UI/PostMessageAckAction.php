@@ -11,11 +11,11 @@
 namespace Kuick\MessageBroker\Api\UI;
 
 use Kuick\Http\JsonResponse;
+use Kuick\Http\NotFoundException;
 use Kuick\Http\Request;
 use Kuick\MessageBroker\Api\Security\TokenGuard;
 use Kuick\UI\ActionInterface;
-use Kuick\MessageBroker\Infrastructure\DiskStore;
-use Kuick\MessageBroker\Infrastructure\NotFoundException;
+use Kuick\MessageBroker\Infrastructure\MessageNotFoundException;
 use Kuick\MessageBroker\Infrastructure\StoreInterface;
 
 class PostMessageAckAction implements ActionInterface
@@ -35,14 +35,13 @@ class PostMessageAckAction implements ActionInterface
                 $channel,
                 $messageId,
             );
-        } catch (NotFoundException $error) {
+        } catch (MessageNotFoundException $error) {
             throw new NotFoundException($error->getMessage());
         }
         return new JsonResponse(
             [
-                'acked' => true,
-                'channel' => $channel,
                 'messageId' => $messageId,
+                'acked' => true,
             ],
             JsonResponse::HTTP_ACCEPTED
         );

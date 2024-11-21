@@ -12,6 +12,8 @@ namespace Kuick\MessageBroker\Infrastructure;
 
 interface StoreInterface
 {
+    public const MAX_TTL = 2592000; //30 days
+
     public function publish(string $channel, string $message, int $ttl = 300): string;
 
     public function getMessages(string $userToken, string $channel): array;

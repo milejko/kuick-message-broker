@@ -13,7 +13,6 @@ namespace Kuick\MessageBroker\Api\UI;
 use Kuick\Http\JsonResponse;
 use Kuick\Http\Request;
 use Kuick\UI\ActionInterface;
-use Kuick\MessageBroker\Infrastructure\DiskStore;
 use Kuick\MessageBroker\Infrastructure\StoreInterface;
 
 class PostMessageAction implements ActionInterface
@@ -37,8 +36,6 @@ class PostMessageAction implements ActionInterface
         return new JsonResponse(
             [
                 'messageId' => $messageId,
-                'channel' => $channel,
-                'ttl' => $ttl,
             ],
             JsonResponse::HTTP_ACCEPTED
         );
