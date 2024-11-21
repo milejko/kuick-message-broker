@@ -27,6 +27,7 @@ FROM dist AS test-runner
 ENV XDEBUG_ENABLE=1 \
     XDEBUG_MODE=coverage
 
+RUN echo "\napc.enable_cli=1" >> /etc/php/${PHP_VERSION}/mods-available/apcu.ini
 RUN composer install --dev
 
 ###########################################
