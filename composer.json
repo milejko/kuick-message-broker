@@ -73,8 +73,5 @@
             "php-http/discovery": true
         }
     },
-    "require-dev": {
-        "mmi/mmi-build-toolkit": "*"
-    },
-    "minimum-stability": "alpha"
+    "minimum-stability": "beta"
 }

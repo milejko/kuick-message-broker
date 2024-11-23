@@ -1,5 +1,5 @@
 <?php
 
 return [
-    //you can put different Store implementation ie. Redis
+    //some config and injections only for prod
 ];

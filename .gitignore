@@ -4,8 +4,6 @@ composer.lock
 /.php*
 /vendor/
 .DS_Store
-/bin/console
-/public/index.php
 /public/build*
 /var
 version.*
