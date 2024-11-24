@@ -11,6 +11,7 @@
 namespace Kuick\MessageBroker\Infrastructure;
 
 use APCUIterator;
+use Psr\Log\LoggerInterface;
 
 /**
  * APCu store messenger implementation
@@ -21,10 +22,14 @@ class APCUStore implements StoreInterface
     private const ACK_TEMPLATE = 'kuickmback-%s%s%s';
     private const SEARCH_PATTERN_TEMPLATE = '/^%s$/';
 
-    public function __construct()
+    public function __construct(private LoggerInterface $logger)
     {
-        if (!function_exists('apcu_store')) {
-            throw new StoreException('APCu not installed or not enabled');
+        if (!function_exists('apcu_enabled')) {
+            throw new StoreException('APCu not installed');
+        }
+        /** @disregard P1009 Undefined type */
+        if (!apcu_enabled()) {
+            throw new StoreException('APCu not enabled');
         }
     }
 
@@ -32,6 +37,11 @@ class APCUStore implements StoreInterface
     {
         $messageId = $this->generateMessageId();
         apcu_store($this->getMessageKey($channel, $messageId), MessageSerializer::serialize($messageId, $message, $ttl));
+        
+        var_dump(apcu_fetch("test"));
+        apcu_store("test", "works", 3600);
+        var_dump(apcu_fetch("test"));
+
         return $messageId;
     }
     

@@ -10,7 +10,7 @@ use Kuick\MessageBroker\Api\UI\PostMessageAction;
 use Kuick\MessageBroker\Shared\UI\HomeAction;
 
 return [
-    //to make 
+    //remove this route if you need to specify your own "home" route
     [
         'pattern' => '/',
         'action' => HomeAction::class

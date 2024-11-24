@@ -21,7 +21,7 @@ class TokenGuard implements GuardInterface
 {
     public const TOKEN_HEADER = 'Authorization';
 
-    private const BEARER_TOKEN_TEMPLATE = 'Bearer %s';
+    private const BEARER_PREFIX = 'Bearer ';
     private const ERROR_MISSING_CHANNEL = "Request query is missing 'channel'";
     private const ERROR_MISSING_TOKEN = 'Token is missing';
     private const ERROR_INVALID_TOKEN = 'Token is invalid';
@@ -38,43 +38,26 @@ class TokenGuard implements GuardInterface
         if (null === $channel) {
             throw new BadRequestException(self::ERROR_MISSING_CHANNEL);
         }
-        $requestToken = $request->headers->get(self::TOKEN_HEADER);
-        if (null === $requestToken) {
+        $bearerHeader = $request->headers->get(self::TOKEN_HEADER);
+        if (null === $bearerHeader) {
             throw new UnauthorizedException(self::ERROR_MISSING_TOKEN);
         }
+        $requestToken = substr($bearerHeader, strlen(self::BEARER_PREFIX));
         if (Request::METHOD_GET == $request->getMethod()) {
-            $this->validateConsumer($request, $channel);
+            $this->validateToken($this->consumerTokens, $requestToken, $channel);
             return;
-        }
-        $this->validatePublisher($requestToken, $channel);
-    }
-
-    private function validatePublisher(string $requestToken, string $channel): void
-    {
-        if (!isset($this->publisherTokens[$channel])) {
-            throw new ForbiddenException(self::ERROR_NO_CHANNEL_TOKENS);
         }
         $this->validateToken($this->publisherTokens, $requestToken, $channel);
     }
 
-    private function validateConsumer(string $requestToken, string $channel): void
-    {
-        if (!isset($this->consumerTokens[$channel])) {
-            throw new ForbiddenException(self::ERROR_NO_CHANNEL_TOKENS);
-        }
-        $this->validateToken($this->consumerTokens, $requestToken, $channel);
-    }
-
     private function validateToken(array $store, string $requestToken, $channel): void
     {
-        foreach ($store[$channel] as $token) {
-            $expectedToken = sprintf(self::BEARER_TOKEN_TEMPLATE, $token);
-            //token match
-            if ($requestToken == $expectedToken) {
-                return;
-            }
+        if (!isset($store[$channel])) {
+            throw new ForbiddenException(self::ERROR_NO_CHANNEL_TOKENS);
+        }
+        if (in_array($requestToken, $store[$channel])) {
+            return;
         }
         throw new ForbiddenException(self::ERROR_INVALID_TOKEN);
-
     }
 }
