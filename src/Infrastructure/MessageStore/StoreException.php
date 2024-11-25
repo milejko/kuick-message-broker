@@ -12,4 +12,6 @@ namespace Kuick\MessageBroker\Infrastructure\MessageStore;
 
 use Kuick\App\AppException;
 
-class StoreException extends AppException {}
+class StoreException extends AppException
+{
+}

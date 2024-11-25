@@ -30,7 +30,8 @@ class TokenGuard implements GuardInterface
     public function __construct(
         #[Inject('kuick.mb.publisher.tokens')] private array $publisherTokens,
         #[Inject('kuick.mb.consumer.tokens')] private array $consumerTokens,
-    ) {}
+    ) {
+    }
 
     public function __invoke(Request $request): void
     {

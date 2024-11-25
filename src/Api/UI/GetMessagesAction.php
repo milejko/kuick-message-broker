@@ -19,7 +19,9 @@ use Psr\Log\LoggerInterface;
 
 class GetMessagesAction implements ActionInterface
 {
-    public function __construct(private StoreInterface $store, private LoggerInterface $logger) {}
+    public function __construct(private StoreInterface $store, private LoggerInterface $logger)
+    {
+    }
 
     public function __invoke(Request $request): JsonResponse
     {

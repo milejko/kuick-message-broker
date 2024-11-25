@@ -16,7 +16,8 @@ namespace Kuick\MessageBroker\Infrastructure\MessageStore;
 class RedisStore extends StoreAbstract
 {
     /** @disregard P1009 Undefined type */
-    public function __construct(private \Redis $redis) {
+    public function __construct(private \Redis $redis)
+    {
         //$redis->flushAll();
     }
 

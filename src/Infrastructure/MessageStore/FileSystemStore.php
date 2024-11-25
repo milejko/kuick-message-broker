@@ -23,7 +23,9 @@ class FilesystemStore extends StoreAbstract
     private const ACK_FOLDER = BASE_PATH . '/var/mb/acks';
     private const GC_DIVISOR = 100;
 
-    public function __construct(private Filesystem $filesystem) {}
+    public function __construct(private Filesystem $filesystem)
+    {
+    }
 
     public function publish(string $channel, string $message, int $ttl = 300): string
     {
@@ -40,7 +42,7 @@ class FilesystemStore extends StoreAbstract
         $directoryIterator = new GlobIterator($this->getMessagesFolder($channel) . $this->getMessagesPattern($channel), FilesystemIterator::KEY_AS_FILENAME);
         foreach ($directoryIterator as $item) {
             $messageFileName = $item->getPathname();
-            $messageId = $this->extractMessageIdFromMessageKey($messageFileName);            
+            $messageId = $this->extractMessageIdFromMessageKey($messageFileName);
             //already acked
             if ($this->filesystem->exists($this->getAcksFolder($channel) . $this->getAckKey($channel, $messageId, $userToken))) {
                 continue;
