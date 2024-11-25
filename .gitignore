@@ -1,0 +1,11 @@
+composer.lock
+.phpunit*
+/.idea
+/.php*
+/vendor/
+.DS_Store
+/public/build*
+/var
+version.*
+.env
+.env.local
