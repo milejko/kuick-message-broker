@@ -8,6 +8,11 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
+use Kuick\MessageBroker\Infrastructure\MessageStore\FilesystemStore;
+use Kuick\MessageBroker\Infrastructure\MessageStore\StoreInterface;
+
+use function DI\autowire;
+
 /**
  * PHP-DI definitions
  * @see https://php-di.org/doc/php-definitions.html
@@ -28,4 +33,6 @@ return [
             //'another-user@pass2',
         ],
     ],
+
+    //StoreInterface::class => autowire(FilesystemStore::class),
 ];

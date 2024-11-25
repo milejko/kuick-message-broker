@@ -1,4 +1,4 @@
-name: "Code analysis and checks"
+name: "Kuick Message Broker CI"
 
 on:
 

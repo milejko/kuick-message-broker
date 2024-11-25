@@ -14,13 +14,14 @@ use Kuick\Http\JsonResponse;
 use Kuick\Http\NotFoundException;
 use Kuick\Http\Request;
 use Kuick\MessageBroker\Api\Security\TokenGuard;
+use Kuick\MessageBroker\Infrastructure\MessageStore\MessageNotFoundException;
+use Kuick\MessageBroker\Infrastructure\MessageStore\StoreInterface;
 use Kuick\UI\ActionInterface;
-use Kuick\MessageBroker\Infrastructure\MessageNotFoundException;
-use Kuick\MessageBroker\Infrastructure\StoreInterface;
+use Psr\Log\LoggerInterface;
 
 class PostMessageAckAction implements ActionInterface
 {
-    public function __construct(private StoreInterface $store)
+    public function __construct(private StoreInterface $store, private LoggerInterface $logger)
     {
     }
 
@@ -28,13 +29,14 @@ class PostMessageAckAction implements ActionInterface
     {
         $channel = $request->query->get('channel');
         $messageId = $request->query->get('messageId');
-        $userLabel = md5($request->headers->get(TokenGuard::TOKEN_HEADER));
+        $userToken = $request->headers->get(TokenGuard::TOKEN_HEADER);
         try {
             $this->store->ack(
-                $userLabel,
                 $channel,
                 $messageId,
+                $userToken,
             );
+            $this->logger->info('Acked message: ' . $messageId . ' by user: ' . md5($userToken));
         } catch (MessageNotFoundException $error) {
             throw new NotFoundException($error->getMessage());
         }

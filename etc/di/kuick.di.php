@@ -1,12 +1,6 @@
 <?php
 
-/**
- * Kuick Message Broker (https://github.com/milejko/kuick-message-broker)
- *
- * @link       https://github.com/milejko/kuick-message-broker
- * @copyright  Copyright (c) 2010-2024 Mariusz Miłejko (mariusz@milejko.pl)
- * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
- */
+use Psr\Container\ContainerInterface;
 
 /**
  * PHP-DI definitions
@@ -18,6 +12,7 @@ return [
     'kuick.app.locale'    => 'en_US.utf-8',
     'kuick.app.timezone'  => 'UTC',
 
+    'kuick.app.monolog.useMicroseconds' => true,
     'kuick.app.monolog.level' => 'WARNING',
     'kuick.app.monolog.handlers' => [
         [
@@ -27,4 +22,15 @@ return [
     ],
 
     'kuick.app.ops.guards.token' => 'secret-token',
+ 
+    //autowiring
+    //SomeInterface::class => DI\autowire(SomeImplementation::class),
+
+    //create
+    //LoggerInterface::class => DI\create(Logger::class),
+ 
+    //factory
+    //AnotherInterface::class => function (ContainerInterface $container) {
+    //    return new AnotherClass($container->get('something'));
+    //},
 ];

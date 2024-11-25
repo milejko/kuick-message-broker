@@ -8,17 +8,15 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Kuick\MessageBroker\Infrastructure;
+namespace Kuick\MessageBroker\Infrastructure\MessageStore;
 
 interface StoreInterface
 {
-    public const MAX_TTL = 2592000; //30 days
-
     public function publish(string $channel, string $message, int $ttl = 300): string;
 
-    public function getMessages(string $userToken, string $channel): array;
+    public function getMessage(string $channel, string $messageId, string $userToken): array;
 
-    public function getMessage(string $userToken, string $messageId, string $channel): array;
+    public function getMessages(string $channel, string $userToken): array;
 
-    public function ack(string $userToken, string $channel, string $messageId): void;
+    public function ack(string $channel, string $messageId, string $userToken): void;
 }
