@@ -14,14 +14,14 @@ use Kuick\Http\JsonResponse;
 use Kuick\Http\NotFoundException;
 use Kuick\MessageBroker\Api\Security\TokenGuard;
 use Kuick\MessageBroker\Infrastructure\MessageStore\MessageNotFoundException;
-use Kuick\MessageBroker\Infrastructure\MessageStore\StoreInterface;
+use Kuick\MessageBroker\Infrastructure\MessageStore\MessageStore;
 use Kuick\UI\ActionInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
 class GetMessageAction implements ActionInterface
 {
-    public function __construct(private StoreInterface $store, private LoggerInterface $logger)
+    public function __construct(private MessageStore $store, private LoggerInterface $logger)
     {
     }
 

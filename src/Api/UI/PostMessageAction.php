@@ -12,7 +12,7 @@ namespace Kuick\MessageBroker\Api\UI;
 
 use Kuick\Http\JsonResponse;
 use Kuick\Http\ResponseCodes;
-use Kuick\MessageBroker\Infrastructure\MessageStore\StoreInterface;
+use Kuick\MessageBroker\Infrastructure\MessageStore\MessageStore;
 use Kuick\UI\ActionInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -21,7 +21,7 @@ class PostMessageAction implements ActionInterface
 {
     private const DEFAULT_MESSAGE_TTL = 300;
 
-    public function __construct(private StoreInterface $store, private LoggerInterface $logger)
+    public function __construct(private MessageStore $store, private LoggerInterface $logger)
     {
     }
 

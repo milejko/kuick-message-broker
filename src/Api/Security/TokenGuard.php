@@ -26,8 +26,8 @@ class TokenGuard implements GuardInterface
     private const BEARER_PREFIX = 'Bearer ';
     
     public function __construct(
-        #[Inject('kuick.mb.publisher.token.map')] private string $publisherTokenMap,
-        #[Inject('kuick.mb.consumer.token.map')] private string $consumerTokenMap,
+        #[Inject('kuick.mb.publisher.map')] private string $publisherTokenMap,
+        #[Inject('kuick.mb.consumer.map')] private string $consumerTokenMap,
         private LoggerInterface $logger,
     ) {
     }
@@ -54,6 +54,7 @@ class TokenGuard implements GuardInterface
     {
         $channelMap = [];
         parse_str($map, $channelMap);
+        $this->logger->debug('Channel map is containg tokens for: ' . count($channelMap) . ' channel(s)');
         if (!isset($channelMap[$channel])) {
             throw new ForbiddenException('No tokens found for this channel');
         }

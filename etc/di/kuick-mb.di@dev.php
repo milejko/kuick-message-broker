@@ -13,7 +13,4 @@
  * @see https://php-di.org/doc/php-definitions.html
  */
 return [
-    //some dummy tokens
-    'kuick.mb.consumer.token.map' => 'sample-channel[]=reader@pass&sample-channel[]=user@pass',
-    'kuick.mb.publisher.token.map' => 'sample-channel[]=publisher@pass',
 ];

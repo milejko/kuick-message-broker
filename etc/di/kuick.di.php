@@ -1,7 +1,5 @@
 <?php
 
-use Psr\Container\ContainerInterface;
-
 /**
  * PHP-DI definitions
  * @see https://php-di.org/doc/php-definitions.html
@@ -22,15 +20,4 @@ return [
     ],
 
     'kuick.app.ops.guards.token' => 'secret-token-please-change-me',
- 
-    //autowiring
-    //SomeInterface::class => DI\autowire(SomeImplementation::class),
-
-    //create
-    //LoggerInterface::class => DI\create(Logger::class),
- 
-    //factory
-    //AnotherInterface::class => function (ContainerInterface $container) {
-    //    return new AnotherClass($container->get('something'));
-    //},
 ];
