@@ -1,12 +1,12 @@
 # syntax=docker/dockerfile:1.6
 
 ARG PHP_VERSION=8.3
-ARG OS_VARIANT=apache
+ARG OS_VARIANT=alpine
 
 ###################################################################
 # Base PHP target                                                 #
 ###################################################################
-FROM milejko/php:${PHP_VERSION}-${OS_VARIANT} AS base
+FROM milejko/php:${PHP_VERSION}-apache-${OS_VARIANT} AS base
 
 ###################################################################
 # Distribution target (ie. for production environments)           #
@@ -36,7 +36,7 @@ FROM dist AS test-runner
 
 ENV XDEBUG_ENABLE=1 \
     XDEBUG_MODE=coverage \
-    KUICK_APP_ENV=test
+    KUICK_APP_ENV=dev
 
 COPY --link ./tests ./tests
 COPY --link ./php* .

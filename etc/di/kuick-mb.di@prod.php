@@ -21,7 +21,6 @@ use function DI\factory;
  */
 return [
     //redis store for production
-    'kuick.mb.store.redis.dsn' => '127.0.0.1:6379?database=1',
     Redis::class => factory([RedisClientFactory::class, 'create']),
     StoreInterface::class => autowire(RedisStore::class),
 ];

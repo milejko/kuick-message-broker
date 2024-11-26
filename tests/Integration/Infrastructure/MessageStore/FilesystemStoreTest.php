@@ -8,14 +8,10 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Tests\Kuick\MessageBroker\Store;
+namespace Tests\Kuick\MessageBroker\Infrastructure\Integration\Message;
 
 use Kuick\MessageBroker\Infrastructure\MessageStore\FilesystemStore;
-use Symfony\Component\Filesystem\Filesystem;
 
-/**
- * Disk backed publisher
- */
 class FilesystemStoreTest extends \PHPUnit\Framework\TestCase
 {
     public function testIfStandardFlowWorksCorrectly(): void

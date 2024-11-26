@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - "v*.*.*"
-    branches:
-      - "main"
   workflow_dispatch:
 
 jobs:
@@ -14,7 +12,7 @@ jobs:
     name: "Deploy"
     strategy:
       matrix:
-        os-variant: ['apache', 'apache-noble', 'apache-jammy', 'apache-alpine']
+        os-variant: ['bookworm', 'noble', 'jammy', 'alpine']
       fail-fast: false
     runs-on: ubuntu-latest
 
@@ -49,11 +47,11 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ secrets.DOCKERHUB_USERNAME }}/php
+        images: ${{ secrets.DOCKERHUB_USERNAME }}/message-broker
         tags: |
-          type=raw,value=1.0,enable=${{ 'apache' == matrix.os-variant }}
-          type=raw,value=latest,enable=${{ 'apache' == matrix.os-variant }}
-          type=raw,value=1.0-${{ matrix.os-variant }}
+          type=raw,value=${{ github.ref_name }},enable=${{ 'apache' == matrix.os-variant }}
+          type=raw,value=latest,enable=${{ 'noble' == matrix.os-variant }}
+          type=raw,value=${{ github.ref_name }}-${{ matrix.os-variant }}
     - 
       name: Build & push to Docker Hub
       uses: docker/build-push-action@v5

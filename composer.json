@@ -21,7 +21,7 @@
         "ext-pcre": "*",
         "ext-reflection": "*",
         "ext-spl": "*",
-        "kuick/framework": "dev-main",
+        "kuick/framework": "^1.0",
         "nyholm/dsn": "^2.0"
     },
     "scripts": {
@@ -73,6 +73,5 @@
         "phpstan/phpstan": "^1.0",
         "friendsofphp/php-cs-fixer": "^3.0",
         "phpmetrics/phpmetrics": "^2.0"
-    },
-    "minimum-stability": "dev"
+    }
 }
