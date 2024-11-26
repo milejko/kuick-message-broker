@@ -6,7 +6,7 @@ ARG OS_VARIANT=apache
 ###################################################################
 # Base PHP target                                                 #
 ###################################################################
-FROM milejko/php:${PHP_VERSION}-${VARIANT} AS base
+FROM milejko/php:${PHP_VERSION}-${OS_VARIANT} AS base
 
 ###################################################################
 # Distribution target (ie. for production environments)           #

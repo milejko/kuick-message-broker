@@ -31,8 +31,7 @@ jobs:
         context: ./
         target: dist
         tags: testing
-        build-args: |
-          OS_VARIANT=${{ matrix.os-variant }}
+        build-args: OS_VARIANT=${{ matrix.os-variant }}
     - 
       name: Set up QEMU (multiplatform)
       uses: docker/setup-qemu-action@v3
