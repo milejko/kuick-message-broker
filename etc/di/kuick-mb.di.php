@@ -9,11 +9,7 @@
  */
 
 use Kuick\MessageBroker\Infrastructure\MessageStore\FilesystemStore;
-use Kuick\MessageBroker\Infrastructure\MessageStore\RedisClientFactory;
-use Kuick\MessageBroker\Infrastructure\MessageStore\RedisStore;
 use Kuick\MessageBroker\Infrastructure\MessageStore\StoreInterface;
-
-use Redis;
 
 use function DI\autowire;
 
