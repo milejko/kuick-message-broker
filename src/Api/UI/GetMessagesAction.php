@@ -11,10 +11,10 @@
 namespace Kuick\MessageBroker\Api\UI;
 
 use Kuick\Http\JsonResponse;
-use Kuick\Http\Request;
 use Kuick\MessageBroker\Api\Security\TokenGuard;
 use Kuick\MessageBroker\Infrastructure\MessageStore\StoreInterface;
 use Kuick\UI\ActionInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
 class GetMessagesAction implements ActionInterface
@@ -23,11 +23,11 @@ class GetMessagesAction implements ActionInterface
     {
     }
 
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(ServerRequestInterface $request): JsonResponse
     {
-        $userToken = $request->headers->get(TokenGuard::TOKEN_HEADER);
+        $userToken = $request->getHeaderLine(TokenGuard::TOKEN_HEADER);
         $messages = $this->store->getMessages(
-            $request->query->get('channel'),
+            $request->getQueryParams()['channel'],
             $userToken,
         );
         $this->logger->info('Listing messages for user: ' . md5($userToken) . ' list contains: ' . count($messages) . ' messages');

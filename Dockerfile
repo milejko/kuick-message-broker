@@ -1,11 +1,12 @@
 # syntax=docker/dockerfile:1.6
 
 ARG PHP_VERSION=8.3
+ARG OS_VARIANT=apache
 
 ###################################################################
 # Base PHP target                                                 #
 ###################################################################
-FROM milejko/php:${PHP_VERSION}-apache AS base
+FROM milejko/php:${PHP_VERSION}-${VARIANT} AS base
 
 ###################################################################
 # Distribution target (ie. for production environments)           #

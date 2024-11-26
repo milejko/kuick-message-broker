@@ -8,21 +8,22 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
+use Kuick\MessageBroker\Infrastructure\MessageStore\FilesystemStore;
+use Kuick\MessageBroker\Infrastructure\MessageStore\RedisClientFactory;
 use Kuick\MessageBroker\Infrastructure\MessageStore\RedisStore;
 use Kuick\MessageBroker\Infrastructure\MessageStore\StoreInterface;
 
+use Redis;
+
 use function DI\autowire;
-use function DI\create;
-use function DI\env;
 
 /**
  * PHP-DI definitions
  * @see https://php-di.org/doc/php-definitions.html
  */
 return [
-    'kuick.mb.consumer.tokens' => [],
-    'kuick.mb.publisher.tokens' => [],
+    'kuick.mb.consumer.token.map' => '',
+    'kuick.mb.publisher.token.map' => '',
 
-    StoreInterface::class => create(RedisStore::class)
-        ->constructor(env('KUICK_MB_STORE_REDIS_DSN')),
+    StoreInterface::class => autowire(FilesystemStore::class),
 ];

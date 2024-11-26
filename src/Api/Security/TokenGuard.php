@@ -13,52 +13,57 @@ namespace Kuick\MessageBroker\Api\Security;
 use DI\Attribute\Inject;
 use Kuick\Http\BadRequestException;
 use Kuick\Http\ForbiddenException;
-use Kuick\Http\Request;
+use Kuick\Http\RequestMethods;
 use Kuick\Http\UnauthorizedException;
 use Kuick\Security\GuardInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 
 class TokenGuard implements GuardInterface
 {
     public const TOKEN_HEADER = 'Authorization';
 
     private const BEARER_PREFIX = 'Bearer ';
-    private const ERROR_MISSING_CHANNEL = "Request query is missing 'channel'";
-    private const ERROR_MISSING_TOKEN = 'Token is missing';
-    private const ERROR_INVALID_TOKEN = 'Token is invalid';
-    private const ERROR_NO_CHANNEL_TOKENS = 'No tokens found for this channel';
-
+    
     public function __construct(
-        #[Inject('kuick.mb.publisher.tokens')] private array $publisherTokens,
-        #[Inject('kuick.mb.consumer.tokens')] private array $consumerTokens,
+        #[Inject('kuick.mb.publisher.token.map')] private string $publisherTokenMap,
+        #[Inject('kuick.mb.consumer.token.map')] private string $consumerTokenMap,
+        private LoggerInterface $logger,
     ) {
     }
 
-    public function __invoke(Request $request): void
+    public function __invoke(ServerRequestInterface $request): void
     {
-        $channel = $request->get('channel');
+        $channel = $request->getQueryParams()['channel'] ?? null;
         if (null === $channel) {
-            throw new BadRequestException(self::ERROR_MISSING_CHANNEL);
+            throw new BadRequestException('Missing channel parameter');
         }
-        $bearerHeader = $request->headers->get(self::TOKEN_HEADER);
-        if (null === $bearerHeader) {
-            throw new UnauthorizedException(self::ERROR_MISSING_TOKEN);
+        $bearerHeader = $request->getHeaderLine(self::TOKEN_HEADER);
+        if (!$bearerHeader) {
+            throw new UnauthorizedException('Token is missing');
         }
         $requestToken = substr($bearerHeader, strlen(self::BEARER_PREFIX));
-        if (Request::METHOD_GET == $request->getMethod()) {
-            $this->validateToken($this->consumerTokens, $requestToken, $channel);
+        if (RequestMethods::GET == $request->getMethod()) {
+            $this->validateToken($this->consumerTokenMap, $requestToken, $channel);
             return;
         }
-        $this->validateToken($this->publisherTokens, $requestToken, $channel);
+        $this->validateToken($this->publisherTokenMap, $requestToken, $channel);
     }
 
-    private function validateToken(array $store, string $requestToken, $channel): void
+    private function validateToken(string $map, string $requestToken, $channel): void
     {
-        if (!isset($store[$channel])) {
-            throw new ForbiddenException(self::ERROR_NO_CHANNEL_TOKENS);
+        $channelMap = [];
+        parse_str($map, $channelMap);
+        if (!isset($channelMap[$channel])) {
+            throw new ForbiddenException('No tokens found for this channel');
         }
-        if (in_array($requestToken, $store[$channel])) {
-            return;
+        $this->logger->debug('Channel has: ' . count($channelMap[$channel]) . ' defined token(s)');
+        foreach ($channelMap[$channel] as $token) {
+            if ($token == $requestToken) {
+                $this->logger->debug('Token matched: ' . substr($requestToken, 0, 5) . '...');
+                return;
+            }
         }
-        throw new ForbiddenException(self::ERROR_INVALID_TOKEN);
+        throw new ForbiddenException('Token is invalid');
     }
 }

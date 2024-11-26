@@ -12,25 +12,24 @@ namespace Kuick\MessageBroker\Infrastructure\MessageStore;
 
 use FilesystemIterator;
 use GlobIterator;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Filesystem disk store implementation
  */
 class FilesystemStore extends StoreAbstract
 {
-    private const MESSAGES_FOLDER = BASE_PATH . '/var/mb/messages';
-    private const ACK_FOLDER = BASE_PATH . '/var/mb/acks';
+    private const MESSAGES_FOLDER = '/mb-messages';
+    private const ACK_FOLDER = '/mb-acks';
     private const GC_DIVISOR = 100;
 
-    public function __construct(private Filesystem $filesystem)
+    public function __construct(private string $basePath = '/tmp')
     {
     }
 
     public function publish(string $channel, string $message, int $ttl = 300): string
     {
         $messageId = $this->generateMessageId();
-        $this->filesystem->dumpFile($this->getMessagesFolder($channel) . $this->getMessageKey($channel, $messageId), $this->serializeMessage($message, $ttl));
+        file_put_contents($this->getMessagesFolder($channel) . $this->getMessageKey($channel, $messageId), $this->serializeMessage($message, $ttl));
         //garbage collector
         $this->gc($channel);
         return $messageId;
@@ -44,10 +43,10 @@ class FilesystemStore extends StoreAbstract
             $messageFileName = $item->getPathname();
             $messageId = $this->extractMessageIdFromMessageKey($messageFileName);
             //already acked
-            if ($this->filesystem->exists($this->getAcksFolder($channel) . $this->getAckKey($channel, $messageId, $userToken))) {
+            if (file_exists($this->getAcksFolder($channel) . $this->getAckKey($channel, $messageId, $userToken))) {
                 continue;
             }
-            $message = $this->unserializeMessage($messageId, $this->filesystem->readfile($messageFileName));
+            $message = $this->unserializeMessage($messageId, file_get_contents($messageFileName));
             //validate ttl
             if ($message['createTime'] < time() - $message['ttl']) {
                 continue;
@@ -58,13 +57,13 @@ class FilesystemStore extends StoreAbstract
         return $messages;
     }
 
-    public function getMessage(string $channel, string $messageId, string $userToken, $autoack = false): array
+    public function getMessage(string $channel, string $messageId, string $userToken, bool $autoack = false): array
     {
         $messageFileName = $this->getMessagesFolder($channel) . $this->getMessageKey($channel, $messageId);
-        if (!$this->filesystem->exists($messageFileName)) {
+        if (!file_exists($messageFileName)) {
             throw new MessageNotFoundException();
         }
-        if ($this->filesystem->exists($this->getAcksFolder($channel) . $this->getAckKey($channel, $messageId, $userToken))) {
+        if (file_exists($this->getAcksFolder($channel) . $this->getAckKey($channel, $messageId, $userToken))) {
             throw new MessageNotFoundException();
         }
         $message = $this->unserializeMessage($messageId, file_get_contents($messageFileName));
@@ -82,7 +81,7 @@ class FilesystemStore extends StoreAbstract
         //make sure that message exists
         $this->getMessage($channel, $messageId, $userToken);
         //write ack
-        $this->filesystem->dumpFile($this->getAcksFolder($channel) . $this->getAckKey($channel, $messageId, $userToken), null);
+        file_put_contents($this->getAcksFolder($channel) . $this->getAckKey($channel, $messageId, $userToken), null);
     }
 
     public function gc(string $channel): void
@@ -96,25 +95,29 @@ class FilesystemStore extends StoreAbstract
             if ($messageFile->getCTime() > time() - self::MAX_TTL) {
                 continue;
             }
-            $this->filesystem->remove($messageFile->getPathname());
+            unlink($messageFile->getPathname());
             $acksIterator = new GlobIterator($this->getAcksFolder($channel) . basename($messageFile->getPathname()) . '*', FilesystemIterator::KEY_AS_FILENAME);
             foreach ($acksIterator as $ackFile) {
-                $this->filesystem->remove($ackFile->getPathname());
+                unlink($ackFile->getPathname());
             }
         }
     }
 
     private function getMessagesFolder(string $channel): string
     {
-        $dirName = self::MESSAGES_FOLDER . DIRECTORY_SEPARATOR . md5($channel) . DIRECTORY_SEPARATOR;
-        $this->filesystem->mkdir($dirName);
+        $dirName = $this->basePath . self::MESSAGES_FOLDER . DIRECTORY_SEPARATOR . md5($channel) . DIRECTORY_SEPARATOR;
+        if (!file_exists($dirName)) {
+            mkdir($dirName, 0777, true);
+        }
         return $dirName;
     }
 
     private function getAcksFolder(string $channel): string
     {
-        $dirName = self::ACK_FOLDER . DIRECTORY_SEPARATOR . md5($channel) . DIRECTORY_SEPARATOR;
-        $this->filesystem->mkdir($dirName);
+        $dirName = $this->basePath . self::ACK_FOLDER . DIRECTORY_SEPARATOR . md5($channel) . DIRECTORY_SEPARATOR;
+        if (!file_exists($dirName)) {
+            mkdir($dirName, 0777, true);
+        }
         return $dirName;
     }
 }

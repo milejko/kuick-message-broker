@@ -11,9 +11,10 @@
 namespace Kuick\MessageBroker\Api\UI;
 
 use Kuick\Http\JsonResponse;
-use Kuick\Http\Request;
+use Kuick\Http\ResponseCodes;
 use Kuick\MessageBroker\Infrastructure\MessageStore\StoreInterface;
 use Kuick\UI\ActionInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
 class PostMessageAction implements ActionInterface
@@ -24,16 +25,16 @@ class PostMessageAction implements ActionInterface
     {
     }
 
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(ServerRequestInterface $request): JsonResponse
     {
-        $ttl = (int) $request->query->get('ttl') > 0 ? (int) $request->query->get('ttl') : self::DEFAULT_MESSAGE_TTL;
-        $messageId = $this->store->publish($request->query->get('channel'), $request->getContent(), $ttl);
+        $ttl = $request->getQueryParams()['ttl'] ?? self::DEFAULT_MESSAGE_TTL;
+        $messageId = $this->store->publish($request->getQueryParams()['channel'], $request->getBody()->getContents(), (int) $ttl > 0 ? $ttl : self::DEFAULT_MESSAGE_TTL);
         $this->logger->info('Published message: ' . $messageId);
         return new JsonResponse(
             [
                 'messageId' => $messageId
             ],
-            JsonResponse::HTTP_ACCEPTED
+            ResponseCodes::CREATED
         );
     }
 }

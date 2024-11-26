@@ -12,10 +12,9 @@ use Kuick\MessageBroker\Api\Security\MessageIdParamGuard;
 use Kuick\MessageBroker\Api\Security\TokenGuard;
 use Kuick\MessageBroker\Api\UI\GetMessageAction;
 use Kuick\MessageBroker\Api\UI\GetMessagesAction;
+use Kuick\MessageBroker\Api\UI\HomeAction;
 use Kuick\MessageBroker\Api\UI\PostMessageAckAction;
 use Kuick\MessageBroker\Api\UI\PostMessageAction;
-use Kuick\MessageBroker\Shared\UI\HomeAction;
-use Symfony\Component\HttpFoundation\Request;
 
 return [
     [
@@ -33,13 +32,13 @@ return [
         'guards' => [TokenGuard::class],
     ],
     [
-        'method' => Request::METHOD_POST,
+        'method' => 'POST',
         'pattern' => '/api/message',
         'action' => PostMessageAction::class,
         'guards' => [TokenGuard::class],
     ],
     [
-        'method' => Request::METHOD_POST,
+        'method' => 'POST',
         'pattern' => '/api/message/ack',
         'action' => PostMessageAckAction::class,
         'guards' => [TokenGuard::class, MessageIdParamGuard::class],

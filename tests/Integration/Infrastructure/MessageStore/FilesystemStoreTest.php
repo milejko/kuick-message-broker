@@ -20,7 +20,7 @@ class FilesystemStoreTest extends \PHPUnit\Framework\TestCase
 {
     public function testIfStandardFlowWorksCorrectly(): void
     {
-        $dm = new FilesystemStore(new Filesystem());
+        $dm = new FilesystemStore(BASE_PATH . '/var/tmp/tests');
         $userToken = 'john-doe@my_very_secret.1789';
         $channel = 'sample-channel';
 
@@ -49,7 +49,7 @@ class FilesystemStoreTest extends \PHPUnit\Framework\TestCase
 
     public function testIfAutoAckWorks(): void
     {
-        $dm = new FilesystemStore(new Filesystem());
+        $dm = new FilesystemStore(BASE_PATH . '/var/tmp/tests');
         $userToken = 'jane-doe@my_very_secret.1789';
         $channel = 'another-channel';
 
@@ -62,7 +62,7 @@ class FilesystemStoreTest extends \PHPUnit\Framework\TestCase
 
     public function testIfOneSecondMessageLivesLessThan2Seconds(): void
     {
-        $dm = new FilesystemStore(new Filesystem());
+        $dm = new FilesystemStore(BASE_PATH . '/var/tmp/tests');
         $userToken = 'jack-doe@my_very_secret.1789';
         $channel = 'yet-another-channel';
 

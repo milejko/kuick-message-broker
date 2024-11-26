@@ -10,8 +10,6 @@
 
 namespace Kuick\MessageBroker\Infrastructure\MessageStore;
 
-use DI\Attribute\Inject;
-use Nyholm\Dsn\DsnParser;
 use Redis;
 
 /**
@@ -19,20 +17,8 @@ use Redis;
  */
 class RedisStore extends StoreAbstract
 {
-    /** @disregard P1009 Undefined type */
-    private Redis $redis;
-
-    public function __construct(private string $dsn)
+    public function __construct(private Redis $redis)
     {
-        $parsedDsn = DsnParser::parse($dsn);
-        /** @disregard P1009 Undefined type */
-        $this->redis = new Redis([
-            'host' => $parsedDsn->getHost(),
-            'port' => $parsedDsn->getPort(),
-            'persistent' => $parsedDsn->getParameter('persistent', true),
-            'connectTimeout' => 0.5
-        ]);
-        $this->redis->select($parsedDsn->getParameter('database', 1));
     }
 
     public function publish(string $channel, string $message, int $ttl = 300): string
@@ -59,7 +45,7 @@ class RedisStore extends StoreAbstract
         return $messages;
     }
 
-    public function getMessage(string $channel, string $messageId, string $userToken, $autoack = false): array
+    public function getMessage(string $channel, string $messageId, string $userToken, bool $autoack = false): array
     {
         $serializedMessage = $this->redis->get($this->getMessageKey($channel, $messageId));
         if (!$serializedMessage) {

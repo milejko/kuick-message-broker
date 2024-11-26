@@ -14,7 +14,7 @@ interface StoreInterface
 {
     public function publish(string $channel, string $message, int $ttl = 300): string;
 
-    public function getMessage(string $channel, string $messageId, string $userToken): array;
+    public function getMessage(string $channel, string $messageId, string $userToken, bool $autoack): array;
 
     public function getMessages(string $channel, string $userToken): array;
 
