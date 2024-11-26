@@ -10,15 +10,29 @@
 
 namespace Kuick\MessageBroker\Infrastructure\MessageStore;
 
+use DI\Attribute\Inject;
+use Nyholm\Dsn\DsnParser;
+use Redis;
+
 /**
  * Redis store messenger implementation
  */
 class RedisStore extends StoreAbstract
 {
     /** @disregard P1009 Undefined type */
-    public function __construct(private \Redis $redis)
+    private Redis $redis;
+
+    public function __construct(private string $dsn)
     {
-        //$redis->flushAll();
+        $parsedDsn = DsnParser::parse($dsn);
+        /** @disregard P1009 Undefined type */
+        $this->redis = new Redis([
+            'host' => $parsedDsn->getHost(),
+            'port' => $parsedDsn->getPort(),
+            'persistent' => $parsedDsn->getParameter('persistent', true),
+            'connectTimeout' => 0.5
+        ]);
+        $this->redis->select($parsedDsn->getParameter('database', 1));
     }
 
     public function publish(string $channel, string $message, int $ttl = 300): string

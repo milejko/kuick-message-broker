@@ -23,7 +23,8 @@
         "ext-reflection": "*",
         "ext-spl": "*",
         "kuick/framework": "^1.0",
-        "symfony/filesystem": "^7.0"
+        "symfony/filesystem": "^7.0",
+        "nyholm/dsn": "^2.0"
     },
     "scripts": {
         "fix:phpcbf": "phpcbf",

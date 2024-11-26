@@ -10,11 +10,10 @@
 
 use Kuick\MessageBroker\Infrastructure\MessageStore\RedisStore;
 use Kuick\MessageBroker\Infrastructure\MessageStore\StoreInterface;
-use Redis;
 
 use function DI\autowire;
 use function DI\create;
-use function DI\get;
+use function DI\env;
 
 /**
  * PHP-DI definitions
@@ -24,12 +23,6 @@ return [
     'kuick.mb.consumer.tokens' => [],
     'kuick.mb.publisher.tokens' => [],
 
-    'kuick.mb.store.redis' => [
-        'host' => '127.0.0.1',
-        'port' => 6379,
-        'connectTimeout' => 1,
-    ],
-
-    Redis::class => create()->constructor(get('kuick.mb.store.redis')),
-    StoreInterface::class => autowire(RedisStore::class),
+    StoreInterface::class => create(RedisStore::class)
+        ->constructor(env('KUICK_MB_STORE_REDIS_DSN')),
 ];

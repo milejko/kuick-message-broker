@@ -11,12 +11,11 @@
 namespace Kuick\MessageBroker\Api\Security;
 
 use Kuick\Http\BadRequestException;
-use Kuick\Http\Request;
 use Kuick\Security\GuardInterface;
 
 class MessageIdParamGuard implements GuardInterface
 {
-    public function __invoke(Request $request): void
+    public function __invoke(RequestInterface $request): void
     {
         if (!$request->query->get('messageId')) {
             throw new BadRequestException('Query param "messageId" is required');
