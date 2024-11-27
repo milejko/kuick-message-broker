@@ -66,7 +66,7 @@ class MessageStore
         //make sure that message exists
         $this->getMessage($channel, $messageId, $userToken);
         //write ack with max ttl
-        $this->storageAdapter->set($this->getAckNamespace($channel), $messageId . $userToken, 1, StorageAdapterInterface::MAX_TTL);
+        $this->storageAdapter->set($this->getAckNamespace($channel), $messageId . $userToken, '', StorageAdapterInterface::MAX_TTL);
     }
 
     private function isAcked(string $channel, string $messageId, string $userToken): bool

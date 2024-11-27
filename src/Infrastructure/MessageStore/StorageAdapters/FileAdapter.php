@@ -33,7 +33,7 @@ class FileAdapter implements StorageAdapterInterface
         }
         $value = ValueSerializer::unserialize($serializedValue);
         //expired
-        if ($value['createTime'] + $value['ttl'] < time()) {
+        if ((int) ($value['createTime'] + $value['ttl']) < time()) {
             return null;
         }
         return $value;

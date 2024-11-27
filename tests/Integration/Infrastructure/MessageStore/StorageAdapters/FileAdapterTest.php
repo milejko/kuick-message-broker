@@ -27,6 +27,7 @@ class FileAdapterTest extends \PHPUnit\Framework\TestCase
         assertFalse($dm->has($namespace, 'inexistent'));
         assertNull($dm->get($namespace, 'inexistent'));
     }
+
     public function testIfValuesAreProperlySetAndReveived(): void
     {
         $dm = new FileAdapter(BASE_PATH . '/var/tmp/tests');
@@ -43,6 +44,7 @@ class FileAdapterTest extends \PHPUnit\Framework\TestCase
         assertEquals(1, $dm->get($namespace, 'foo')['ttl']);
         assertEquals([0 => 'foo'], $dm->browseKeys('second', 'fo*'));
     }
+
     public function testIfWeirdKeysAreHandledProperly(): void
     {
         $dm = new FileAdapter(BASE_PATH . '/var/tmp/tests');
@@ -54,6 +56,7 @@ class FileAdapterTest extends \PHPUnit\Framework\TestCase
         assertEquals('value', $dm->get($namespace, $key)['message']);
         assertEquals([0 => $key], $dm->browseKeys($namespace));
     }
+
     public function testTtls(): void
     {
         $dm = new FileAdapter(BASE_PATH . '/var/tmp/tests');
