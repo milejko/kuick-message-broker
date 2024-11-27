@@ -14,8 +14,7 @@ FROM milejko/php:${PHP_VERSION}-apache-${OS_VARIANT} AS base
 FROM base AS dist
 
 # Important performance hint:
-# Always use environment variable of KUICK_APP_ENV
-# .env files should be used only in dev/test modes
+# KUICK_APP_ENV=prod should be defined here, or via environment variables
 ENV KUICK_APP_ENV=prod \
     KUICK_MB_STORAGE_DSN=file:///var/www/html/var/tmp/messages
 

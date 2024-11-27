@@ -10,8 +10,10 @@
 ## Installation (for development purposes) - Docker
 
 1. Install Docker (if you don't have it already)
-2. Run: docker build -t message-broker .
-3. docker run -it 
+2. Run:
+```
+docker run -p 8080:80 kuickphp/message-broker
+```
 
 ### Usage
 
