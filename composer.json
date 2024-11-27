@@ -12,15 +12,6 @@
     ],
     "require": {
         "php": ">=8.2.0",
-        "ext-bcmath": "*",
-        "ext-date": "*",
-        "ext-fileinfo": "*",
-        "ext-hash": "*",
-        "ext-json": "*",
-        "ext-mbstring": "*",
-        "ext-pcre": "*",
-        "ext-reflection": "*",
-        "ext-spl": "*",
         "kuick/framework": "^1.0",
         "nyholm/dsn": "^2.0"
     },
