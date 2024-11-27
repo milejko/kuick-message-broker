@@ -71,6 +71,10 @@ class FileAdapter implements StorageAdapterInterface
         $directoryIterator = new GlobIterator($this->getDataFolderName($namespace) . $pattern, FilesystemIterator::KEY_AS_FILENAME);
         $keys = [];
         foreach ($directoryIterator as $item) {
+            //file is way to old
+            if ($item->getCTime() + self::MAX_TTL < time()) {
+                continue;
+            }
             $key = $this->decodeKey(basename($item->getPathname()));
             //item needs to read and checked with ttl checker
             if (null === $this->get($namespace, $key)) {
