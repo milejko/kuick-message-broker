@@ -51,12 +51,10 @@ jobs:
       with:
         images: ${{ secrets.DOCKERHUB_USERNAME }}/message-broker
         tags: |
-          type=semver,pattern={{version}},suffix=${{ matrix.os-variant }}
-          type=semver,pattern={{major}}.{{minor}},suffix=${{ matrix.os-variant }}
           type=semver,pattern={{version}},enable=${{ 'jammy' == matrix.os-variant }}
           type=semver,pattern={{major}}.{{minor}},enable=${{ 'jammy' == matrix.os-variant }}
           type=raw,value=latest,enable=${{ 'jammy' == matrix.os-variant }}
-          type=raw,value=
+          type=raw,value=${{ matrix.os-variant }}
     - 
       name: Build & push to Docker Hub
       uses: docker/build-push-action@v5

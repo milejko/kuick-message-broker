@@ -1,7 +1,7 @@
 ######################
 # Default parameters #
 ######################
-IMAGE_NAME := milejko/kuick-message-broker
+IMAGE_NAME := kuickphp/kuick-message-broker
 FORCE_BUILD := 0
 
 .DEFAULT_GOAL := test
@@ -21,11 +21,8 @@ test: version.txt
 	docker image rm $(CI_TAG)
 
 build: version.txt
-	docker build --target=dist --platform "linux/amd64,linux/arm64" --tag=$(IMAGE_NAME):$(shell cat version.txt) .
+	docker build --target=dist --tag=$(IMAGE_NAME):$(shell cat version.txt) .
 	docker image ls | grep $(IMAGE_NAME)
-
-push: version.txt
-	docker push $(IMAGE_NAME):$(shell cat version.txt)
 
 #########################################
 # Local development environment targets #
