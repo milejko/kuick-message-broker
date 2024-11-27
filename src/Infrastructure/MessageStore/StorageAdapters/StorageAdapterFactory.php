@@ -11,10 +11,7 @@
 namespace Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters;
 
 use DI\Attribute\Inject;
-use Nyholm\Dsn\Configuration\Dsn;
 use Nyholm\Dsn\DsnParser;
-use Redis;
-use Throwable;
 
 class StorageAdapterFactory
 {
@@ -29,10 +26,10 @@ class StorageAdapterFactory
         switch ($dsn->getScheme()) {
             case 'redis':
                 return (new RedisClientFactory)($dsn);
-            case 'files':
+            case 'file':
                 return new FileAdapter($dsn->getPath());
             default:
-                throw new StorageAdapterException('DSN string invalid: \'' . $this->dsnString . '\', valid examples: redis://127.0.0.1:6379 or files:///tmp/messages');
+                throw new StorageAdapterException('DSN invalid: \'' . $this->dsnString . '\', valid examples: redis://127.0.0.1:6379 or file:///tmp');
         }
     }
 }

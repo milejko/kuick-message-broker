@@ -12,7 +12,6 @@ use Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapt
 use Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterInterface;
 
 use function DI\factory;
-use function DI\get;
 
 /**
  * PHP-DI definitions
@@ -22,7 +21,7 @@ return [
     'kuick.mb.consumer.map' => 'sample-channel[]=user@pass',
     'kuick.mb.publisher.map' => 'sample-channel[]=user@pass',
 
-    'kuick.mb.storage.dsn' => 'files:///var/www/html/var/tmp/messages',
+    'kuick.mb.storage.dsn' => 'file:///var/www/html/var/tmp/messages',
 
     StorageAdapterInterface::class => factory(StorageAdapterFactory::class),
 ];

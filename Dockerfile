@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.6
 
 ARG PHP_VERSION=8.3
-ARG OS_VARIANT=alpine
+ARG OS_VARIANT=noble
 
 ###################################################################
 # Base PHP target                                                 #
@@ -16,7 +16,8 @@ FROM base AS dist
 # Important performance hint:
 # Always use environment variable of KUICK_APP_ENV
 # .env files should be used only in dev/test modes
-ENV KUICK_APP_ENV=prod
+ENV KUICK_APP_ENV=prod \
+    KUICK_MB_STORAGE_DSN=file:///var/www/html/var/tmp/messages
 
 COPY --link ./bin/console ./bin/console
 COPY --link ./etc/di ./etc/di
