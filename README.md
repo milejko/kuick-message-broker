@@ -6,7 +6,8 @@
 
 ## What is Kuick Message Broker?
 
-* It is a small, fast message broker with dedicated publisher, and PHP client, but it also can be used everywhere else via rest-json API.
+* It is a small, fast message broker with dedicated publisher, and PHP client, but it also can be used everywhere else via rest-json API.<br>
+Ready to deploy images you can find here: https://hub.docker.com/r/kuickphp/message-broker/tags
 
 ## Requirements
 
@@ -23,7 +24,9 @@ docker run -p 8080:80 kuickphp/message-broker:alpine
 Now you can try it out by opening http://localhost:8080/
 3. Specify more options ie. set storage to redis (of course you should specify the real redis address)
 ```
-docker run -p 8080:80 -e KUICK_MB_STORAGE_DSN="redis://127.0.0.1:6379" kuickphp/message-broker:alpine
+docker run -p 8080:80 \
+  -e KUICK_MB_STORAGE_DSN="redis://127.0.0.1:6379" \
+  kuickphp/message-broker:alpine
 ```
 4. Let's define some channel permissions, below configuration will give:
 - "read" permission to "news" channel for "john@pass" and "jane@pass"
@@ -34,5 +37,5 @@ docker run -p 8080:80 \
   -e KUICK_MB_PUBLISHER_MAP="news[]=john@pass" \
   kuickphp/message-broker:alpine
 ```
-Now you can check out message list, by calling http://localhost:8080/api/messages?channel=news
+Now you can check out message list, by calling http://localhost:8080/api/messages?channel=news<br>
 Remember to set header "Authorization: Bearer john@pass"
