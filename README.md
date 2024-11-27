@@ -1,8 +1,8 @@
-# README
+# Kuick Message Broker
 
 [![Latest Version](https://img.shields.io/github/release/milejko/kuick-message-broker.svg?style=flat-square)](https://github.com/milejko/kuick-message-broker)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
-[![Total Downloads](https://img.shields.io/packagist/dt/milejko/kuick-message-broker.svg?style=flat-square)](https://packagist.org/packages/milejko/kuick-message-broker)
+[![Total Downloads](https://img.shields.io/packagist/dt/kuick/message-broker.svg?style=flat-square)](https://packagist.org/packages/kuick/message-broker)
 
 ## What is Kuick Message Broker?
 
