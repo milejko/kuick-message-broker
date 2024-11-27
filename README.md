@@ -1,4 +1,9 @@
 # README
+
+[![Latest Version](https://img.shields.io/github/release/milejko/kuick-message-broker.svg?style=flat-square)](https://github.com/milejko/kuick-message-broker)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
+[![Total Downloads](https://img.shields.io/packagist/dt/milejko/kuick-message-broker.svg?style=flat-square)](https://packagist.org/packages/milejko/kuick-message-broker)
+
 ## What is Kuick Message Broker?
 
 * It is a small, fast message broker with dedicated publisher, and PHP client, but it also can be used everywhere else via rest-json API.
