@@ -54,7 +54,6 @@ jobs:
           type=semver,pattern={{major}}.{{minor}},suffix=-${{ matrix.os-variant }}
           type=semver,pattern={{version}},enable=${{ 'jammy' == matrix.os-variant }}
           type=semver,pattern={{major}}.{{minor}},enable=${{ 'jammy' == matrix.os-variant }}
-          type=raw,value=latest,enable=${{ 'jammy' == matrix.os-variant }}
     - 
       name: Build & push to Docker Hub
       uses: docker/build-push-action@v5
