@@ -10,41 +10,38 @@
 
 namespace Kuick\MessageBroker\Infrastructure\MessageStore;
 
-use Kuick\MessageBroker\Infrastructure\Repositories\RepositoryInterface;
+use Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterInterface;
 
 /**
  * Message store
  */
 class MessageStore
 {
-    private const ACK_MAX_TTL = 2592000; //30 days
+    private const MESSAGE_NAMESPACE_KEY_TEMPLATE = 'kuickmsg-%s';
+    private const ACK_NAMESPACE_KEY_TEMPLATE = 'kuickack-%s';
 
-    private const MESSAGE_PATTERN_TEMPLATE = 'kuickmbmsg-%s-*';
-    private const MESSAGE_TEMPLATE = 'kuickmbmsg-%s-%s';
-    private const ACK_TEMPLATE = 'kuickmback-%s-%s-%s';
-
-    public function __construct(private RepositoryInterface $repository)
+    public function __construct(private StorageAdapterInterface $storageAdapter)
     {
     }
 
     public function publish(string $channel, string $message, int $ttl = 300): string
     {
-        $messageId = $this->generateMessageId();
-        $this->repository->set($this->getMessageKey($channel, $messageId), $message, $ttl);
+        $messageId = md5(__CLASS__ . microtime() . mt_rand());
+        $this->storageAdapter->set($this->getMessageNamespace($channel), $messageId, $message, $ttl);
         return $messageId;
     }
 
     public function getMessages(string $channel, string $userToken): array
     {
         $messages = [];
-        foreach ($this->browseMessageKeys($channel) as $messageKey) {
-            $messageId = $this->extractMessageIdFromMessageKey($messageKey);
+        $messageKeys = $this->storageAdapter->browseKeys($this->getMessageNamespace($channel));
+        foreach ($messageKeys as $messageId) {
             //already acked
-            if ($this->repository->get($this->getAckKey($channel, $messageId, $userToken))) {
+            if ($this->isAcked($channel, $messageId, $userToken)) {
                 continue;
             }
-            $message = $this->repository->get($messageKey);
-            unset($message['message']);
+            $message = $this->storageAdapter->get($this->getMessageNamespace($channel), $messageId);
+            unset($message['message']); //we do not want to output a complete message
             $message['messageId'] = $messageId;
             $messages[] = $message;
         }
@@ -53,56 +50,37 @@ class MessageStore
 
     public function getMessage(string $channel, string $messageId, string $userToken, bool $autoack = false): array
     {
-        $message = $this->repository->get($this->getMessageKey($channel, $messageId));
-        if (null === $message) {
+        $message = $this->storageAdapter->get($this->getMessageNamespace($channel), $messageId);
+        //no message, or already acked
+        if (null === $message || $this->isAcked($channel, $messageId, $userToken)) {
             throw new MessageNotFoundException();
         }
-        //already acked
-        if ($this->repository->get($this->getAckKey($channel, $messageId, $userToken))) {
-            throw new MessageNotFoundException();
-        }
-        $message['messageId'] = $messageId;
         if ($autoack) {
             $this->ack($channel, $messageId, $userToken);
         }
-        return $message + ['acked' => $autoack];
+        return $message + ['messageId' => $messageId, 'acked' => $autoack];
     }
 
     public function ack(string $channel, string $messageId, string $userToken): void
     {
         //make sure that message exists
         $this->getMessage($channel, $messageId, $userToken);
-        //write ack
-        $this->repository->set($this->getAckKey($channel, $messageId, $userToken), 1, self::ACK_MAX_TTL);
+        //write ack with max ttl
+        $this->storageAdapter->set($this->getAckNamespace($channel), $messageId . $userToken, 1, StorageAdapterInterface::MAX_TTL);
     }
 
-    private function browseMessageKeys(string $channel): array
+    private function isAcked(string $channel, string $messageId, string $userToken): bool
     {
-        return $this->repository->browseKeys(sprintf(self::MESSAGE_PATTERN_TEMPLATE, $channel));
+        return $this->storageAdapter->has($this->getAckNamespace($channel), $messageId . $userToken);
     }
 
-    protected function generateMessageId(): string
+    private function getMessageNamespace(string $namespace): string
     {
-        return md5(__CLASS__ . microtime() . mt_rand());
+        return sprintf(self::MESSAGE_NAMESPACE_KEY_TEMPLATE, $namespace);
     }
 
-    protected function getMessageKey(string $channel, string $messageId): string
+    private function getAckNamespace(string $namespace): string
     {
-        return sprintf(self::MESSAGE_TEMPLATE, $channel, $messageId);
-    }
-
-    protected function extractMessageIdFromMessageKey(string $messageKey): string
-    {
-        return substr($messageKey, -32);
-    }
-
-    protected function getMessagesPattern(string $channel): string
-    {
-        return sprintf(self::MESSAGE_PATTERN_TEMPLATE, $channel);
-    }
-
-    protected function getAckKey(string $channel, string $messageId, string $userToken): string
-    {
-        return sprintf(self::ACK_TEMPLATE, $channel, $messageId, $userToken);
+        return sprintf(self::ACK_NAMESPACE_KEY_TEMPLATE, $namespace);
     }
 }

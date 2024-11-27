@@ -8,10 +8,10 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Kuick\MessageBroker\Infrastructure\Repositories;
+namespace Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters;
 
 use Kuick\App\AppException;
 
-class EntityNotFoundException extends AppException
+class StorageAdapterException extends AppException
 {
 }

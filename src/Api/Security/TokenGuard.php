@@ -56,7 +56,7 @@ class TokenGuard implements GuardInterface
         parse_str($map, $channelMap);
         $this->logger->debug('Channel map is containg tokens for: ' . count($channelMap) . ' channel(s)');
         if (!isset($channelMap[$channel])) {
-            throw new ForbiddenException('No tokens found for this channel');
+            throw new ForbiddenException('No tokens found for this channel: ' . $channel);
         }
         $this->logger->debug('Channel has: ' . count($channelMap[$channel]) . ' defined token(s)');
         foreach ($channelMap[$channel] as $token) {

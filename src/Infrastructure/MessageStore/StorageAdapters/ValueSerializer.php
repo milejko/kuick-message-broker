@@ -8,11 +8,11 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Kuick\MessageBroker\Infrastructure\Repositories;
+namespace Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters;
 
 class ValueSerializer
 {
-    public static function serialize(string $value, int $ttl): string
+    public static function serialize(?string $value, int $ttl): string
     {
         return json_encode([$value, time(), $ttl]);
     }
@@ -20,6 +20,6 @@ class ValueSerializer
     public static function unserialize(string $serializedValue): array
     {
         $valueArray = json_decode($serializedValue, true);
-        return ['value' => $valueArray[0], 'createTime' => $valueArray[1], 'ttl' => $valueArray[2]];
+        return ['message' => $valueArray[0], 'createTime' => $valueArray[1], 'ttl' => $valueArray[2]];
     }
 }

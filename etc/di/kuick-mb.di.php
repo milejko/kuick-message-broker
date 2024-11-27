@@ -8,12 +8,12 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-use Kuick\MessageBroker\Infrastructure\MessageStore\MessageStore;
-use Kuick\MessageBroker\Infrastructure\MessageStore\RedisClientFactory;
-use Kuick\MessageBroker\Infrastructure\Repositories\FileSystemRepository;
-use Kuick\MessageBroker\Infrastructure\Repositories\RedisRepository;
-use Kuick\MessageBroker\Infrastructure\Repositories\RepositoryInterface;
+use Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters\FileAdapter;
+use Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters\RedisAdapter;
+use Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters\RedisClientFactory;
+use Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * PHP-DI definitions
@@ -23,16 +23,18 @@ return [
     'kuick.mb.consumer.map' => 'sample-channel[]=user@pass',
     'kuick.mb.publisher.map' => 'sample-channel[]=user@pass',
 
-    RepositoryInterface::class => function(ContainerInterface $container) {
-        $repository = $container->has('kuick.mb.repository') ?
-            $container->get('kuick.mb.repository') :
-            null;
-        switch ($repository) {
+    StorageAdapterInterface::class => function(ContainerInterface $container) {
+        $logger = $container->get(LoggerInterface::class);
+        $adapterKey = 'kuick.mb.storage.adapter';
+        switch ($container->has($adapterKey) ? $container->get($adapterKey) : null) {
             case 'redis':
-                $redisClient = RedisClientFactory::create($container);
-                return new RedisRepository($redisClient);
+                $logger->info('Redis storage adapter selected');
+                return new RedisAdapter(RedisClientFactory::create($container));
             default:
-                return new FileSystemRepository(BASE_PATH . '/var/tmp/messages');
+                $logger->info('Default file storage adapter selected');
+                $pathKey = 'kuick.mb.storage.path';
+                $path = $container->has($pathKey) ? $container->get($pathKey) : BASE_PATH . '/var/tmp/messages';
+                return new FileAdapter($path);
         }
     },
 ];
