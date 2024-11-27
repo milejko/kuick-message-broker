@@ -15,7 +15,6 @@ use Nyholm\Dsn\DsnParser;
 
 class StorageAdapterFactory
 {
-
     public function __construct(#[Inject('kuick.mb.storage.dsn')] private string $dsnString)
     {
     }
