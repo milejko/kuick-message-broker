@@ -2,7 +2,7 @@
 
 ARG PHP_VERSION=8.3 \
     SERVER_VARIANT=apache \
-    OS_VARIANT=noble
+    OS_VARIANT=jammy
 
 ###################################################################
 # Base PHP target                                                 #
@@ -31,7 +31,9 @@ ENV KUICK_APP_ENV=prod \
 COPY --link ./etc/apache2 /etc/apache2
 COPY --link composer.dist.json composer.json
 
-RUN composer install \ 
+RUN set -eux; \
+    composer install \ 
+    --prefer-dist \
     --no-dev \
     --classmap-authoritative \
     --no-plugins
@@ -52,7 +54,8 @@ COPY ./tests ./tests
 COPY ./composer.json ./composer.json
 COPY ./php* ./
 
-RUN composer install
+RUN set -eux; \
+    composer install
 
 ###################################################################
 # Dev server target                                               #

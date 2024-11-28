@@ -73,10 +73,10 @@ jobs:
           type=semver,pattern={{version}},suffix=-${{ matrix.os-variant }}
           type=semver,pattern={{major}},suffix=-${{ matrix.os-variant }}
           type=semver,pattern={{major}}.{{minor}},suffix=-${{ matrix.os-variant }}
-          type=semver,pattern={{version}},enable=${{ 'noble' == matrix.os-variant }}
-          type=semver,pattern={{major}},enable=${{ 'noble' == matrix.os-variant }}
-          type=semver,pattern={{major}}.{{minor}},enable=${{ 'noble' == matrix.os-variant }}
-          type=raw,value=latest,enable=${{ 'noble' == matrix.os-variant }}
+          type=semver,pattern={{version}},enable=${{ 'jammy' == matrix.os-variant }}
+          type=semver,pattern={{major}},enable=${{ 'jammy' == matrix.os-variant }}
+          type=semver,pattern={{major}}.{{minor}},enable=${{ 'jammy' == matrix.os-variant }}
+          type=raw,value=latest,enable=${{ 'jammy' == matrix.os-variant }}
     - 
       name: Build & push to Docker Hub
       uses: docker/build-push-action@v5
@@ -84,7 +84,7 @@ jobs:
         push: true
         file: ./Dockerfile
         context: ./
-        platforms: linux/amd64,linux/arm64
+        platforms: linux/amd64,linux/arm64/v8,linux/arm/v7
         target: dist
         tags: ${{ steps.meta.outputs.tags }},
         labels: ${{ steps.meta.outputs.labels }},
