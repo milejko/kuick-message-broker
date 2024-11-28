@@ -24,7 +24,7 @@ class StorageAdapterFactory
         $dsn = DsnParser::parse($this->dsnString);
         switch ($dsn->getScheme()) {
             case 'redis':
-                return (new RedisClientFactory)($dsn);
+                return (new RedisClientFactory())($dsn);
             case 'file':
                 return new FileAdapter($dsn->getPath());
             default:

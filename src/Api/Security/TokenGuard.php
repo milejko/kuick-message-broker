@@ -24,7 +24,7 @@ class TokenGuard implements GuardInterface
     public const TOKEN_HEADER = 'Authorization';
 
     private const BEARER_PREFIX = 'Bearer ';
-    
+
     public function __construct(
         #[Inject('kuick.mb.publisher.map')] private string $publisherTokenMap,
         #[Inject('kuick.mb.consumer.map')] private string $consumerTokenMap,

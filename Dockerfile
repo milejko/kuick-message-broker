@@ -54,6 +54,6 @@ FROM base AS dev-server
 
 COPY ./etc/apache2 /etc/apache2
 
-ENV ENV XDEBUG_ENABLE=1 \
+ENV XDEBUG_ENABLE=1 \
     XDEBUG_MODE=coverage \
     OPCACHE_VALIDATE_TIMESTAMPS=1
