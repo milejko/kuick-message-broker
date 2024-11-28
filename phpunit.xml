@@ -10,7 +10,7 @@
     </include>
     <report>
       <html outputDirectory="public/build/phpunit" lowUpperBound="35" highLowerBound="70"/>
-      <clover outputFile="clover.xml" />
+      <clover outputFile="public/build/clover.xml" />
     </report>
   </coverage>
   <testsuites>

@@ -29,10 +29,9 @@ jobs:
           PHP_VERSION=${{ matrix.version }}
           OS_VARIANT=${{ matrix.os-variant }}
     - name: Run all tests
-      run: docker run php${{ matrix.version }}-${{ matrix.os-variant}}-checks sh -c "composer test:all"
+      run: docker run --rm -v ./:/var/www/html/public/build php${{ matrix.version }}-${{ matrix.os-variant}}-checks sh -c "composer test:all"
     - name: Generate coverage badge
-      uses: timkrase/phpunit-coverage-badge@v1.2.0
+      uses: timkrase/phpunit-coverage-badge@v1.2.1
       with:
         coverage_badge_path: 'badge-coverage.svg'
         push_badge: true
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
