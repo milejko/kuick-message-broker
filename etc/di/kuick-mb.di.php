@@ -18,8 +18,8 @@ use function DI\factory;
  * @see https://php-di.org/doc/php-definitions.html
  */
 return [
-    'kuick.mb.consumer.map' => 'sample-channel[]=user@pass',
-    'kuick.mb.publisher.map' => 'sample-channel[]=user@pass',
+    'kuick.mb.consumer.map' => 'example[]=user@pass',
+    'kuick.mb.publisher.map' => 'example[]=user@pass',
 
     'kuick.mb.storage.dsn' => 'file:///var/www/html/var/tmp/messages',
 

@@ -7,5 +7,4 @@
 /var
 version.*
 composer.lock
-.env.local
 clover.xml

@@ -16,19 +16,30 @@ version.txt:
 test: version.txt
 	# generate CI_TAG to avoid concurrent run collisions
 	$(eval CI_TAG := $(IMAGE_NAME):$(shell date +%s%N))
-	docker build --target=test-runner --tag $(CI_TAG) .
+	docker build --progress=plain \
+		--no-cache \
+		--target=test-runner \
+		--tag $(CI_TAG) \
+		.
 	docker run --rm -v ./public:/var/www/html/public $(CI_TAG) composer test:all
 	docker image rm $(CI_TAG)
 
 build: version.txt
-	docker build --target=dist --tag=$(IMAGE_NAME):$(shell cat version.txt) .
+	docker build --progress=plain \
+		--no-cache \
+		--platform=linux/amd64,linux/arm64 \
+		--target=dist \
+		--tag=$(IMAGE_NAME):$(shell cat version.txt) \
+		.
 
 #########################################
 # Local development environment targets #
 #########################################
-start: version.txt
-
-	docker build --target=dev-server --tag=$(IMAGE_NAME):$(shell cat version.txt)-dev .
+start:
+	docker build --progress=plain \
+		--target=dev-server \
+		--tag=$(IMAGE_NAME):$(shell cat version.txt)-dev \
+		.
 	docker run --rm --name kuick-message-broker-dev -v ./:/var/www/html $(IMAGE_NAME):$(shell cat version.txt)-dev composer install
 	docker run --rm --name kuick-message-broker-dev -v ./:/var/www/html -p 8080:80 $(IMAGE_NAME):$(shell cat version.txt)-dev
 

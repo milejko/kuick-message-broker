@@ -2,7 +2,7 @@
 
 ARG PHP_VERSION=8.3 \
     SERVER_VARIANT=apache \
-    OS_VARIANT=jammy
+    OS_VARIANT=noble
 
 ###################################################################
 # Base PHP target                                                 #
@@ -31,7 +31,11 @@ ENV KUICK_APP_ENV=prod \
 COPY --link ./etc/apache2 /etc/apache2
 COPY --link composer.dist.json composer.json
 
-RUN composer install --no-dev
+RUN composer install \ 
+    --no-dev \
+    --classmap-authoritative \
+    --no-plugins
+
 COPY --link version.* ./public/
 
 ###################################################################
@@ -43,7 +47,10 @@ ENV XDEBUG_ENABLE=1 \
     XDEBUG_MODE=coverage \
     KUICK_APP_ENV=dev
 
-COPY . .
+COPY ./src ./src
+COPY ./tests ./tests
+COPY ./composer.json ./composer.json
+COPY ./php* ./
 
 RUN composer install
 
