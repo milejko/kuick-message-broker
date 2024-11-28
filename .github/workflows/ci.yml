@@ -7,10 +7,11 @@ on:
     
 jobs:
 
-  php8-checks:
+  Testing:
     strategy:
       matrix:
         version: ['8.2', '8.3']
+        os-variant: ['jammy', 'noble', 'bookworm', 'alpine']
       fail-fast: true
     runs-on: ubuntu-latest
     steps:
@@ -21,7 +22,7 @@ jobs:
       with:
         push: false
         target: test-runner
-        tags: php${{ matrix.version }}-checks
-        build-args: PHP_VERSION=${{ matrix.version }}
-    - name: Run tests
-      run: docker run php${{ matrix.version }}-checks sh -c "composer test:all"
+        tags: php${{ matrix.version }}-${{ matrix.os-variant}}-checks
+        build-args: PHP_VERSION=${{ matrix.version }} OS_VARIANT=${{ matrix.os-variant }}
+    - name: Run all tests
+      run: docker run php${{ matrix.version }}-${{ matrix.os-variant}}-checks sh -c "composer test:all"

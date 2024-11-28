@@ -1,4 +1,4 @@
-name: "Kuick Message Broker Delivery"
+name: "CD"
 
 on:
   schedule:
@@ -29,7 +29,6 @@ jobs:
     - name: Run tests
       run: docker run php${{ matrix.version }}-checks sh -c "composer test:all"
   Deploy:
-    name: "Deploy"
     needs: Testing
     strategy:
       matrix:
