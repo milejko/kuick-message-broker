@@ -1,26 +1,14 @@
 <?php
 
-/**
- * Kuick Message Broker
- *
- * @link       https://github.com/milejko/kuick-message-broker.git
- * @copyright  Copyright (c) 2024 Mariusz Miłejko (mariusz@milejko.pl)
- * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
- */
-
 namespace Tests\KuickMessageBroker\Unit\Infrastructure\MessageStore;
 
 use KuickMessageBroker\Infrastructure\MessageStore\MessageNotFoundException;
 use KuickMessageBroker\Infrastructure\MessageStore\MessageStore;
 use Tests\KuickMessageBroker\Mocks\InMemoryStorageAdapterMock;
 
-use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertNotEmpty;
-use function PHPUnit\Framework\assertNull;
-use function PHPUnit\Framework\assertTrue;
 
 class MessageStoreTest extends \PHPUnit\Framework\TestCase
 {

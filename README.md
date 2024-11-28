@@ -1,9 +1,9 @@
 # Kuick Message Broker
 
 [![Latest Version](https://img.shields.io/github/release/milejko/kuick-message-broker.svg)](https://github.com/milejko/kuick-message-broker/releases)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![GitHub Actions CI](https://github.com/milejko/kuick-message-broker/actions/workflows/ci.yml/badge.svg)](https://github.com/milejko/kuick-message-broker/actions/workflows/ci.yml)
 [![Coverage](https://raw.githubusercontent.com/milejko/kuick-message-broker/refs/heads/main/badge-coverage.svg)](https://github.com/milejko/kuick-message-broker/tree/main/tests)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![Total Downloads](https://img.shields.io/packagist/dt/kuick/message-broker.svg)](https://packagist.org/packages/kuick/message-broker)
 
 A small, fast message broker with dedicated publisher based on Kuick(https://github.com/milejko/kuick).
