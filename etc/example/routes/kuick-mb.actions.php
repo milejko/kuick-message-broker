@@ -1,12 +1,12 @@
 <?php
 
-use Kuick\MessageBroker\Api\Security\MessageIdParamGuard;
-use Kuick\MessageBroker\Api\Security\TokenGuard;
-use Kuick\MessageBroker\Api\UI\GetMessageAction;
-use Kuick\MessageBroker\Api\UI\GetMessagesAction;
-use Kuick\MessageBroker\Api\UI\HomeAction;
-use Kuick\MessageBroker\Api\UI\PostMessageAckAction;
-use Kuick\MessageBroker\Api\UI\PostMessageAction;
+use KuickMessageBroker\Api\Security\MessageIdParamGuard;
+use KuickMessageBroker\Api\Security\TokenGuard;
+use KuickMessageBroker\Api\UI\GetMessageAction;
+use KuickMessageBroker\Api\UI\GetMessagesAction;
+use KuickMessageBroker\Api\UI\HomeAction;
+use KuickMessageBroker\Api\UI\PostMessageAckAction;
+use KuickMessageBroker\Api\UI\PostMessageAction;
 
 return [
     //remove this route if you need to specify your own "home" route

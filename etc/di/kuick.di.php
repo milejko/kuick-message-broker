@@ -5,7 +5,7 @@
  * @see https://php-di.org/doc/php-definitions.html
  */
 return [
-    'kuick.app.name'      => 'Kuick app',
+    'kuick.app.name'      => 'KuickMB',
     'kuick.app.charset'   => 'UTF-8',
     'kuick.app.locale'    => 'en_US.utf-8',
     'kuick.app.timezone'  => 'UTC',

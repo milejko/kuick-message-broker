@@ -8,11 +8,11 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Tests\Kuick\MessageBroker\Unit\Infrastructure\MessageStore;
+namespace Tests\KuickMessageBroker\Unit\Infrastructure\MessageStore;
 
-use Kuick\MessageBroker\Infrastructure\MessageStore\MessageNotFoundException;
-use Kuick\MessageBroker\Infrastructure\MessageStore\MessageStore;
-use Tests\Kuick\MessageBroker\Mocks\InMemoryStorageAdapterMock;
+use KuickMessageBroker\Infrastructure\MessageStore\MessageNotFoundException;
+use KuickMessageBroker\Infrastructure\MessageStore\MessageStore;
+use Tests\KuickMessageBroker\Mocks\InMemoryStorageAdapterMock;
 
 use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertCount;

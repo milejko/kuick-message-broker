@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Kuick\MessageBroker\Api\Security;
+namespace KuickMessageBroker\Api\Security;
 
 use DI\Attribute\Inject;
 use Kuick\Http\BadRequestException;

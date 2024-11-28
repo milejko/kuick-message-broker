@@ -22,7 +22,6 @@ test: version.txt
 
 build: version.txt
 	docker build --target=dist --tag=$(IMAGE_NAME):$(shell cat version.txt) .
-	docker image ls | grep $(IMAGE_NAME)
 
 #########################################
 # Local development environment targets #
@@ -30,6 +29,6 @@ build: version.txt
 start: version.txt
 
 	docker build --target=dev-server --tag=$(IMAGE_NAME):$(shell cat version.txt)-dev .
-	#docker run --rm --name kuick-message-broker-dev -v ./:/var/www/html $(IMAGE_NAME):$(shell cat version.txt)-dev composer install
+	docker run --rm --name kuick-message-broker-dev -v ./:/var/www/html $(IMAGE_NAME):$(shell cat version.txt)-dev composer install
 	docker run --rm --name kuick-message-broker-dev -v ./:/var/www/html -p 8080:80 $(IMAGE_NAME):$(shell cat version.txt)-dev
 

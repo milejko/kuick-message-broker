@@ -1,18 +1,22 @@
 <?php
 
-use Kuick\MessageBroker\Infrastructure\MessageStore\FilesystemStore;
-use Kuick\MessageBroker\Infrastructure\MessageStore\StoreInterface;
+use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterFactory;
+use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterInterface;
 
-use function DI\autowire;
+use function DI\factory;
 
 /**
  * PHP-DI definitions
  * @see https://php-di.org/doc/php-definitions.html
  */
 return [
-    //query param format: channel[]=user1&channel[]=user2&channel2=user3
-    'kuick.mb.consumer.token.map' => '',
-    'kuick.mb.publisher.token.map' => '',
+    //common injections and values (params)
 
-    StoreInterface::class => autowire(FilesystemStore::class),
+    //query param format: channel[]=user1&channel[]=user2&channel2=user3
+    'kuick.mb.consumer.map' => 'example[]=user@pass',
+    'kuick.mb.publisher.map' => 'example[]=user@pass',
+
+    'kuick.mb.storage.dsn' => 'file:///var/www/html/var/tmp/messages',
+
+    StorageAdapterInterface::class => factory(StorageAdapterFactory::class),
 ];

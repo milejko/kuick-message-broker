@@ -44,12 +44,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Kuick\\MessageBroker\\": "src/"
+            "KuickMessageBroker\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\Kuick\\MessageBroker\\": "tests"
+            "Tests\\KuickMessageBroker\\": "tests"
         }
     },
     "extra": {

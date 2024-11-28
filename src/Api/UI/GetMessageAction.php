@@ -8,19 +8,21 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Kuick\MessageBroker\Api\UI;
+namespace KuickMessageBroker\Api\UI;
 
 use Kuick\Http\JsonResponse;
 use Kuick\Http\NotFoundException;
-use Kuick\MessageBroker\Api\Security\TokenGuard;
-use Kuick\MessageBroker\Infrastructure\MessageStore\MessageNotFoundException;
-use Kuick\MessageBroker\Infrastructure\MessageStore\MessageStore;
+use KuickMessageBroker\Api\Security\TokenGuard;
+use KuickMessageBroker\Infrastructure\MessageStore\MessageNotFoundException;
+use KuickMessageBroker\Infrastructure\MessageStore\MessageStore;
 use Kuick\UI\ActionInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
 class GetMessageAction implements ActionInterface
 {
+    private const LOG_MESSAGE_TEMPLATE = 'Get message: %s by user: %s..., ack: %s';
+
     public function __construct(private MessageStore $store, private LoggerInterface $logger)
     {
     }
@@ -30,7 +32,7 @@ class GetMessageAction implements ActionInterface
         $userToken = $request->getHeaderLine(TokenGuard::TOKEN_HEADER);
         $autoAck = $request->getQueryParams()['autoack'] ?? false;
         $autoAck = 1 == $autoAck || 'true' === $autoAck;
-        $this->logger->notice('Get message: ' . $request->getQueryParams()['messageId'] . ' by user: ' . md5($userToken) . ', ack: ' . $autoAck);
+        $this->logger->notice(sprintf(self::LOG_MESSAGE_TEMPLATE, $request->getQueryParams()['messageId'], substr($userToken, 7, 5), (int)$autoAck));
         try {
             $message = $this->store->getMessage(
                 $request->getQueryParams()['channel'],

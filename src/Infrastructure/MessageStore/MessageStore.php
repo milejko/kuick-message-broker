@@ -8,9 +8,9 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Kuick\MessageBroker\Infrastructure\MessageStore;
+namespace KuickMessageBroker\Infrastructure\MessageStore;
 
-use Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterInterface;
+use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterInterface;
 
 /**
  * Message store

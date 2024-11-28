@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "kuick/framework",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/milejko/kuick.git",
-                "reference": "2a281b366502e2ee9459f8b605f0dbe048b6c17f"
+                "reference": "20df83e1f545634f31755c3fb9dfea89df6bcfbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/milejko/kuick/zipball/2a281b366502e2ee9459f8b605f0dbe048b6c17f",
-                "reference": "2a281b366502e2ee9459f8b605f0dbe048b6c17f",
+                "url": "https://api.github.com/repos/milejko/kuick/zipball/20df83e1f545634f31755c3fb9dfea89df6bcfbc",
+                "reference": "20df83e1f545634f31755c3fb9dfea89df6bcfbc",
                 "shasum": ""
             },
             "require": {
@@ -74,9 +74,9 @@
             ],
             "support": {
                 "issues": "https://github.com/milejko/kuick/issues",
-                "source": "https://github.com/milejko/kuick/tree/v1.0.0"
+                "source": "https://github.com/milejko/kuick/tree/v1.0.1"
             },
-            "time": "2024-11-26T16:04:36+00:00"
+            "time": "2024-11-28T10:04:32+00:00"
         },
         {
             "name": "laravel/serializable-closure",

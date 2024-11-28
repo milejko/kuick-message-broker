@@ -6,4 +6,5 @@
 /public/build*
 /var
 version.*
+composer.lock
 .env.local

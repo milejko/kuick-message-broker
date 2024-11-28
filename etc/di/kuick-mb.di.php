@@ -8,8 +8,8 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-use Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterFactory;
-use Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterInterface;
+use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterFactory;
+use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterInterface;
 
 use function DI\factory;
 

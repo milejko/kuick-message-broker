@@ -8,9 +8,9 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Tests\Kuick\MessageBroker\Integration\Infrastructure\MessageStore\StorageAdapters;
+namespace Tests\KuickMessageBroker\Integration\Infrastructure\MessageStore\StorageAdapters;
 
-use Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters\FileAdapter;
+use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\FileAdapter;
 
 use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertEquals;

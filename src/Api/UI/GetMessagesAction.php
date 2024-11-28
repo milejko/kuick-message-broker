@@ -8,11 +8,11 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Kuick\MessageBroker\Api\UI;
+namespace KuickMessageBroker\Api\UI;
 
 use Kuick\Http\JsonResponse;
-use Kuick\MessageBroker\Api\Security\TokenGuard;
-use Kuick\MessageBroker\Infrastructure\MessageStore\MessageStore;
+use KuickMessageBroker\Api\Security\TokenGuard;
+use KuickMessageBroker\Infrastructure\MessageStore\MessageStore;
 use Kuick\UI\ActionInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;

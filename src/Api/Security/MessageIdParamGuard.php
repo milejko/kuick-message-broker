@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Kuick\MessageBroker\Api\Security;
+namespace KuickMessageBroker\Api\Security;
 
 use Kuick\Http\BadRequestException;
 use Kuick\Security\GuardInterface;

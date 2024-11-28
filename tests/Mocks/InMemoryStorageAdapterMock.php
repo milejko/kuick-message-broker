@@ -8,11 +8,11 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Tests\Kuick\MessageBroker\Mocks;
+namespace Tests\KuickMessageBroker\Mocks;
 
-use Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterException;
-use Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterInterface;
-use Kuick\MessageBroker\Infrastructure\MessageStore\StorageAdapters\ValueSerializer;
+use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterException;
+use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterInterface;
+use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\ValueSerializer;
 
 class InMemoryStorageAdapterMock implements StorageAdapterInterface
 {
