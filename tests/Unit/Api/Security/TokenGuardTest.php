@@ -24,6 +24,7 @@ class TokenGuardTest extends \PHPUnit\Framework\TestCase
             new NullLogger
         );
     }
+
     public function testIfMissingChannelGivesBadRequest(): void
     {
         $tg = self::createTokenGuard();
