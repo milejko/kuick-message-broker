@@ -1,12 +1,13 @@
 # syntax=docker/dockerfile:1.6
 
-ARG PHP_VERSION=8.3
-ARG OS_VARIANT=jammy
+ARG PHP_VERSION=8.3 \
+    SERVER_VARIANT=apache \
+    OS_VARIANT=jammy
 
 ###################################################################
 # Base PHP target                                                 #
 ###################################################################
-FROM milejko/php:${PHP_VERSION}-apache-${OS_VARIANT} AS base
+FROM milejko/php:${PHP_VERSION}-${SERVER_VARIANT}-${OS_VARIANT} AS base
 
 ###################################################################
 # Distribution target (ie. for production environments)           #
@@ -36,14 +37,13 @@ COPY --link version.* ./public/
 ###################################################################
 # Test runner target                                              #
 ###################################################################
-FROM dist AS test-runner
+FROM base AS test-runner
 
 ENV XDEBUG_ENABLE=1 \
     XDEBUG_MODE=coverage \
     KUICK_APP_ENV=dev
 
-COPY --link ./tests ./tests
-COPY --link ./php* .
+COPY . .
 
 RUN composer install
 
