@@ -1,0 +1,13 @@
+{
+    "require": {
+        "kuick/message-broker": "dev-main"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Kuick\\Composer\\ComposerInstaller::postInstall"
+        ],
+        "post-update-cmd": [
+            "Kuick\\Composer\\ComposerInstaller::postUpdate"
+        ]
+    }
+}

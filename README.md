@@ -1,9 +1,9 @@
 # Kuick Message Broker
 
-[![Latest Version](https://img.shields.io/github/release/milejko/kuick-message-broker.svg?style=flat-square)](https://github.com/milejko/kuick-message-broker)
-[![GitHub CI](https://github.com/milejko/kuick-message-broker/actions/workflows/ci.yml/badge.svg?style=flat-square)](https://github.com/milejko/kuick-message-broker/actions/workflows/ci.yml)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
-[![Total Downloads](https://img.shields.io/packagist/dt/kuick/message-broker.svg?style=flat-square)](https://packagist.org/packages/kuick/message-broker)
+[![Latest Version](https://img.shields.io/github/release/milejko/kuick-message-broker.svg)](https://github.com/milejko/kuick-message-broker/releases)
+[![GitHub Actions CI](https://github.com/milejko/kuick-message-broker/actions/workflows/ci.yml/badge.svg)](https://github.com/milejko/kuick-message-broker/actions/workflows/ci.yml)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
+[![Total Downloads](https://img.shields.io/packagist/dt/kuick/message-broker.svg)](https://packagist.org/packages/kuick/message-broker)
 
 ## What is Kuick Message Broker?
 
