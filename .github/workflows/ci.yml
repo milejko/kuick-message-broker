@@ -23,6 +23,8 @@ jobs:
         push: false
         target: test-runner
         tags: php${{ matrix.version }}-${{ matrix.os-variant}}-checks
-        build-args: PHP_VERSION=${{ matrix.version }} OS_VARIANT=${{ matrix.os-variant }}
+        build-args: |
+          PHP_VERSION=${{ matrix.version }}
+          OS_VARIANT=${{ matrix.os-variant }}
     - name: Run all tests
       run: docker run php${{ matrix.version }}-${{ matrix.os-variant}}-checks sh -c "composer test:all"
