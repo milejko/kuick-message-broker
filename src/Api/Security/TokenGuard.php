@@ -19,7 +19,7 @@ use Kuick\Security\GuardInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
-class TokenGuard implements GuardInterface
+class TokenGuard
 {
     public const TOKEN_HEADER = 'Authorization';
 
@@ -32,12 +32,8 @@ class TokenGuard implements GuardInterface
     ) {
     }
 
-    public function __invoke(ServerRequestInterface $request): void
+    public function __invoke(string $channel, ServerRequestInterface $request): void
     {
-        $channel = $request->getQueryParams()['channel'] ?? null;
-        if (null === $channel) {
-            throw new BadRequestException('Missing channel parameter');
-        }
         $bearerHeader = $request->getHeaderLine(self::TOKEN_HEADER);
         if (!$bearerHeader) {
             throw new UnauthorizedException('Token is missing');

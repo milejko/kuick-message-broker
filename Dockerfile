@@ -52,7 +52,7 @@ ENV XDEBUG_ENABLE=1 \
 COPY ./src ./src
 COPY ./tests ./tests
 COPY ./composer.json ./composer.json
-COPY ./php* ./
+COPY ./php* .
 
 RUN set -eux; \
     composer install

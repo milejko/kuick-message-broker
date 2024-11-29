@@ -1,6 +1,6 @@
 {
     "require": {
-        "kuick/message-broker": "dev-main"
+        "kuick/message-broker": "*"
     },
     "scripts": {
         "post-install-cmd": [

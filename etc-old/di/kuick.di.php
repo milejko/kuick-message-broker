@@ -19,5 +19,5 @@ return [
         ],
     ],
 
-    'kuick.app.ops.guards.token' => 'secret-ops-token-please-change-me',
+    'kuick.app.ops.guards.token' => 'secret-token-please-change-me',
 ];

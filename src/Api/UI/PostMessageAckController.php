@@ -12,37 +12,38 @@ namespace KuickMessageBroker\Api\UI;
 
 use Kuick\Http\JsonResponse;
 use Kuick\Http\NotFoundException;
+use Kuick\Http\ResponseCodes;
 use KuickMessageBroker\Api\Security\TokenGuard;
 use KuickMessageBroker\Infrastructure\MessageStore\MessageNotFoundException;
 use KuickMessageBroker\Infrastructure\MessageStore\MessageStore;
-use Kuick\UI\ActionInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
-class GetMessageAction implements ActionInterface
+class PostMessageAckController
 {
-    private const LOG_MESSAGE_TEMPLATE = 'Get message: %s by user: %s..., ack: %s';
-
     public function __construct(private MessageStore $store, private LoggerInterface $logger)
     {
     }
 
-    public function __invoke(ServerRequestInterface $request): JsonResponse
+    public function __invoke(string $channel, string $messageId, ServerRequestInterface $request): JsonResponse
     {
         $userToken = $request->getHeaderLine(TokenGuard::TOKEN_HEADER);
-        $autoAck = $request->getQueryParams()['autoack'] ?? false;
-        $autoAck = 1 == $autoAck || 'true' === $autoAck;
-        $this->logger->notice(sprintf(self::LOG_MESSAGE_TEMPLATE, $request->getQueryParams()['messageId'], substr($userToken, 7, 5), (int)$autoAck));
         try {
-            $message = $this->store->getMessage(
-                $request->getQueryParams()['channel'],
-                $request->getQueryParams()['messageId'],
+            $this->store->ack(
+                $channel,
+                $messageId,
                 $userToken,
-                $autoAck,
             );
+            $this->logger->info('Acked message: ' . $messageId . ' by user: ' . md5($userToken));
         } catch (MessageNotFoundException $error) {
             throw new NotFoundException($error->getMessage());
         }
-        return new JsonResponse($message);
+        return new JsonResponse(
+            [
+                'messageId' => $messageId,
+                'acked' => true,
+            ],
+            ResponseCodes::ACCEPTED
+        );
     }
 }

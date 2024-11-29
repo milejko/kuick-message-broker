@@ -11,10 +11,9 @@
 namespace KuickMessageBroker\Api\UI;
 
 use Kuick\Http\JsonResponse;
-use Kuick\UI\ActionInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class HomeAction implements ActionInterface
+class HomeController
 {
     private const DEFAULT_RESPONSE = [
         'application' => 'Message Broker',
@@ -26,7 +25,7 @@ class HomeAction implements ActionInterface
         ]
     ];
 
-    public function __invoke(ServerRequestInterface $request): JsonResponse
+    public function __invoke(): JsonResponse
     {
         return new JsonResponse(self::DEFAULT_RESPONSE);
     }
