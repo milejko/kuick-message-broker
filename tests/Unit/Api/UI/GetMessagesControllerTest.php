@@ -10,7 +10,7 @@ use Tests\KuickMessageBroker\Mocks\InMemoryStorageAdapterMock;
 
 use function PHPUnit\Framework\assertEquals;
 
-class GetMessageController extends \PHPUnit\Framework\TestCase
+class GetMessagesControllerTest extends \PHPUnit\Framework\TestCase
 {
     public function testStandardFlow(): void
     {
