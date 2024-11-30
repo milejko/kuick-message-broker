@@ -37,12 +37,23 @@ docker run -p 8080:80 \
   -e KUICK_MB_PUBLISHER_MAP="news[]=john@pass" \
   kuickphp/message-broker
 ```
-Now you can check out message list (news channel), by calling http://localhost:8080/api/messages/news<br>
-Remember to set header "Authorization: Bearer john@pass"
+Now Kuick Message Broker runs on: http://localhost:8080/api/messages/news<br>
+Posting the message by user "john@pass" to channel "news":
+```
+curl -X POST -H "Authorization: Bearer john@pass" -d 'Sample message' http://localhost:8080/api/message/news
+```
+Receiving messages from "news" channel, by "john@pass":
 ```
 curl -H "Authorization: Bearer john@pass" http://localhost:8080/api/messages/news
 ```
-
+Receiving a single message from "news" channel, by "john@pass", with automatic acknowledgement:
+```
+curl -H "Authorization: Bearer john@pass" "http://localhost:8080/api/message/news/{messageId}?autoack=true"
+```
+Manual acknowledgement:
+```
+curl -X POST -H "Authorization: Bearer john@pass" "http://localhost:8080/api/message/ack/news/{messageId}"
+```
 ## Usage (Standalone)
 1. Install PHP>8.2 + Composer
 @TODO: finish this chapter
