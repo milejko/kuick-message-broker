@@ -1,6 +1,7 @@
 name: "CI"
 
 on:
+  pull_request:
   push:
     branches:
       - '**'
@@ -19,7 +20,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: Build docker image
+    - name: Build test runner
       uses: docker/build-push-action@v5
       with:
         push: false
@@ -29,10 +30,10 @@ jobs:
           PHP_VERSION=${{ matrix.version }}
           OS_VARIANT=${{ matrix.os-variant }}
     - name: Run all tests
-      run: docker run --rm -v ./:/var/www/html/public/build php${{ matrix.version }}-${{ matrix.os-variant}}-checks sh -c "composer test:all"
-    - name: Generate coverage badge
-      uses: timkrase/phpunit-coverage-badge@v1.2.1
+      run: docker php${{ matrix.version }}-${{ matrix.os-variant}}-checks sh -c "composer test:all"
+    - name: Build dist image
+      uses: docker/build-push-action@v5
       with:
-        coverage_badge_path: 'badge-coverage.svg'
-        push_badge: true
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        push: false
+        target: dist
+        build-args: PHP_VERSION=${{ matrix.version }}
