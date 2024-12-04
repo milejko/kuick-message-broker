@@ -1,9 +1,11 @@
 # Kuick Message Broker
 
 [![Latest Version](https://img.shields.io/github/release/milejko/kuick-message-broker.svg)](https://github.com/milejko/kuick-message-broker/releases)
+[![PHP](https://img.shields.io/badge/PHP-8.2%20|%208.3-blue?logo=php&cacheSeconds=14400)](https://www.php.net)
 [![Total Downloads](https://img.shields.io/packagist/dt/kuick/message-broker.svg)](https://packagist.org/packages/kuick/message-broker)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![GitHub Actions CI](https://github.com/milejko/kuick-message-broker/actions/workflows/ci.yml/badge.svg)](https://github.com/milejko/kuick-message-broker/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/milejko/kuick-message-broker/graph/badge.svg?token=80QEBDHGPH)](https://codecov.io/gh/milejko/kuick-message-broker)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 
 A small, fast message broker with dedicated publisher based on Kuick(https://github.com/milejko/kuick).
 Communication is handled via JSON-API, see some examples below.

@@ -1,7 +1,7 @@
 ######################
 # Default parameters #
 ######################
-IMAGE_NAME := kuickphp/kuick-message-broker
+IMAGE_NAME := kuickphp/message-broker
 FORCE_BUILD := 0
 
 .DEFAULT_GOAL := test

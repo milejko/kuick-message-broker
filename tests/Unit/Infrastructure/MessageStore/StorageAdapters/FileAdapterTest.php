@@ -8,7 +8,7 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Tests\KuickMessageBroker\Integration\Infrastructure\MessageStore\StorageAdapters;
+namespace Tests\KuickMessageBroker\Unit\Infrastructure\MessageStore\StorageAdapters;
 
 use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\FileAdapter;
 
@@ -20,9 +20,16 @@ use function PHPUnit\Framework\assertTrue;
 
 class FileAdapterTest extends \PHPUnit\Framework\TestCase
 {
+    public static string $cachePath;
+
+    public static function setUpBeforeClass(): void
+    {
+        self::$cachePath = realpath(dirname(__DIR__) . '/../../../../var/tmp/tests');
+    }
+
     public function testIfEmptyStoreThrowsEntityNotFound(): void
     {
-        $dm = new FileAdapter(BASE_PATH . '/var/tmp/tests');
+        $dm = new FileAdapter(self::$cachePath);
         $namespace = 'first';
         assertFalse($dm->has($namespace, 'inexistent'));
         assertNull($dm->get($namespace, 'inexistent'));
@@ -30,7 +37,7 @@ class FileAdapterTest extends \PHPUnit\Framework\TestCase
 
     public function testIfValuesAreProperlySetAndReveived(): void
     {
-        $dm = new FileAdapter(BASE_PATH . '/var/tmp/tests');
+        $dm = new FileAdapter(self::$cachePath);
         $namespace = 'second';
         //empty store
         assertFalse($dm->has($namespace, 'foo'));
@@ -47,7 +54,7 @@ class FileAdapterTest extends \PHPUnit\Framework\TestCase
 
     public function testIfWeirdKeysAreHandledProperly(): void
     {
-        $dm = new FileAdapter(BASE_PATH . '/var/tmp/tests');
+        $dm = new FileAdapter(self::$cachePath);
         $namespace = './looks/../like/hack';
         $key = 'dir://parent/../../${VAR}/key/../^%##$!@#$%^&*()';
         assertFalse($dm->has($namespace, $key));
@@ -59,7 +66,7 @@ class FileAdapterTest extends \PHPUnit\Framework\TestCase
 
     public function testTtls(): void
     {
-        $dm = new FileAdapter(BASE_PATH . '/var/tmp/tests');
+        $dm = new FileAdapter(self::$cachePath);
         $namespace = 'ttls';
         $key = 'ttl-test';
         assertFalse($dm->has($namespace, $key));

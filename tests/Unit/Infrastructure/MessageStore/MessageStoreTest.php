@@ -28,6 +28,17 @@ class MessageStoreTest extends \PHPUnit\Framework\TestCase
         //now message should not be found
         $this->expectException(MessageNotFoundException::class);
         $ms->getMessage($channel, $messageId, $user);
-        //assertNull($ms->getMessage($channel, $messageId, $user));
+    }
+
+    public function testIfAckedMessagesDissapear(): void
+    {
+        $ms = new MessageStore(new InMemoryStorageAdapterMock());
+        $channel = 'foo';
+        $user = 'user@pass';
+        assertEquals([], $ms->getMessages($channel, $user));
+        $messageId = $ms->publish($channel, 'my-message');
+        $ms->ack($channel, $messageId, $user);
+        $this->expectException(MessageNotFoundException::class);
+        $ms->getMessage($channel, $messageId, $user);
     }
 }
