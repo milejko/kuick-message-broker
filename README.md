@@ -1,4 +1,4 @@
-# Kuick Message Broker
+# Kuick PHP Message Broker
 
 [![Latest Version](https://img.shields.io/github/release/milejko/kuick-message-broker.svg)](https://github.com/milejko/kuick-message-broker/releases)
 [![PHP](https://img.shields.io/badge/PHP-8.2%20|%208.3-blue?logo=php&cacheSeconds=14400)](https://www.php.net)
