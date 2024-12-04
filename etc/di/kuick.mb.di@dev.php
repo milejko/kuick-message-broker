@@ -13,4 +13,9 @@
  * @see https://php-di.org/doc/php-definitions.html
  */
 return [
+    'kuick.ops.guard.token' => 'let-me-in',
+
+    //debug for dev
+    'kuick.app.monolog.level' => 'DEBUG',
+    'kuick.app.monolog.useMicroseconds' => true,
 ];

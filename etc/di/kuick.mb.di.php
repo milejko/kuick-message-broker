@@ -18,6 +18,15 @@ use function DI\factory;
  * @see https://php-di.org/doc/php-definitions.html
  */
 return [
+    'kuick.app.name'      => 'Kuick.MB',
+    // Kuick defaults
+    // 'kuick.app.charset'   => 'UTF-8',
+    // 'kuick.app.locale'    => 'en_US.utf-8',
+    // 'kuick.app.timezone'  => 'UTC',
+
+    //disable valid token
+    'kuick.ops.guard.token' => '',
+
     'kuick.mb.consumer.map' => 'example[]=user@pass',
     'kuick.mb.publisher.map' => 'example[]=user@pass',
 

@@ -35,7 +35,7 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-    - name: Build dist image
+    - name: Test building dist image
       uses: docker/build-push-action@v5
       with:
         push: false

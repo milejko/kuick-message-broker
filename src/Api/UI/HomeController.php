@@ -18,10 +18,10 @@ class HomeController
     private const DEFAULT_RESPONSE = [
         'application' => 'Message Broker',
         'api' => [
-            'publish message' => 'POST:/api/message?channel=news&ttl=3600',
-            'get message list' => 'GET:/api/messages?channel=news',
-            'get message' => 'GET:/api/message?channel=news&messageId=some-id&autoack=0',
-            'ack message' => 'POST:/api/message/ack?channel=news&messageId=some-id'
+            'publish message' => 'POST:/api/message/channel-name?ttl=3600',
+            'get message list' => 'GET:/api/messages/channel-name',
+            'get message' => 'GET:/api/message/channel-name/message-id?autoack=0',
+            'ack message' => 'POST:/api/message/ack/channel-name/message-id'
         ]
     ];
 
