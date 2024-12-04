@@ -36,10 +36,7 @@ build: version.txt
 # Local development environment targets #
 #########################################
 start:
-	docker build --progress=plain \
-		--target=dev-server \
-		--tag=$(IMAGE_NAME):$(shell cat version.txt)-dev \
-		.
-	docker run --rm --name kuick-message-broker-dev -v ./:/var/www/html $(IMAGE_NAME):$(shell cat version.txt)-dev composer install
+	docker build --progress=plain --target=dev-server --tag=$(IMAGE_NAME):$(shell cat version.txt)-dev .
+	docker run --rm --name kuick-message-broker-dev -v ./:/var/www/html $(IMAGE_NAME):$(shell cat version.txt)-dev composer install && (mkdir -m 777 var || true)
 	docker run --rm --name kuick-message-broker-dev -v ./:/var/www/html -p 8080:80 $(IMAGE_NAME):$(shell cat version.txt)-dev
 

@@ -18,27 +18,23 @@ FROM base AS dist
 # KUICK_APP_ENV=prod should be defined here, or via environment variables
 # .env* files shouldn't be used in production
 ENV KUICK_APP_ENV=prod \
-    KUICK_APP_NAME=KuickMB \
-    KUICK_APP_CHARSET=UTF-8 \
-    KUICK_APP_LOCALE=en_US.utf-8 \
-    KUICK_APP_TIMEZONE=UTC \
-    KUICK_APP_MONOLOG_LEVEL=NOTICE \
-    \
-    KUICK_MB_CONSUMER_MAP="example[]=user@pass" \
-    KUICK_MB_PUBLISHER_MAP="example[]=user@pass" \
-    KUICK_MB_STORAGE_DSN=file:///var/www/html/var/tmp/messages
+    KUICK_APP_NAME=Kuick.MB
 
 COPY --link ./etc/apache2 /etc/apache2
+COPY --link etc ./etc
+COPY --link public ./public
 COPY --link composer.dist.json composer.json
+COPY --link version.* ./public/
+
+RUN mkdir -m 777 var
 
 RUN set -eux; \
     composer install \ 
     --prefer-dist \
     --no-dev \
     --classmap-authoritative \
+    --no-scripts \
     --no-plugins
-
-COPY --link version.* ./public/
 
 ###################################################################
 # Test runner target                                              #
