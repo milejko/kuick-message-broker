@@ -24,7 +24,7 @@ class InMemoryStorageAdapterMock implements StorageAdapterInterface
         if (!$serializedValue) {
             return null;
         }
-        $value = ValueSerializer::unserialize($serializedValue);
+        $value = (new ValueSerializer())->unserialize($serializedValue);
         //expired
         if ($value['createTime'] + $value['ttl'] < time()) {
             return null;
@@ -37,7 +37,7 @@ class InMemoryStorageAdapterMock implements StorageAdapterInterface
         if ($ttl > self::MAX_TTL) {
             throw new StorageAdapterException("TTL $ttl exceeds " . self::MAX_TTL);
         }
-        $this->storage[$namespace . $key] = ValueSerializer::serialize($value, $ttl);
+        $this->storage[$namespace . $key] = (new ValueSerializer())->serialize($value, $ttl);
         return $this;
     }
 

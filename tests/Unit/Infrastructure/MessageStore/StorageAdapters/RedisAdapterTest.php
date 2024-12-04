@@ -10,9 +10,11 @@
 
 namespace Tests\KuickMessageBroker\Unit\Infrastructure\MessageStore\StorageAdapters;
 
-use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\FileAdapter;
+use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\RedisAdapter;
 use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterException;
-use Symfony\Component\Filesystem\Filesystem;
+use Redis;
+use Tests\KuickMessageBroker\Mocks\InMemoryStorageAdapterMock;
+use Tests\KuickMessageBroker\Mocks\RedisMock;
 
 use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertEquals;
@@ -20,20 +22,11 @@ use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertTrue;
 
-class FileAdapterTest extends \PHPUnit\Framework\TestCase
+class RedisAdapterTest extends \PHPUnit\Framework\TestCase
 {
-    public static string $cachePath;
-
-    public static function setUpBeforeClass(): void
-    {
-        self::$cachePath = dirname(__DIR__) . '/../../../var/tmp/tests';
-        $fs = new Filesystem();
-        $fs->remove(self::$cachePath);
-    }
-
     public function testIfEmptyStoreThrowsEntityNotFound(): void
     {
-        $dm = new FileAdapter(self::$cachePath);
+        $dm = new RedisAdapter(new RedisMock());
         $namespace = 'first';
         assertFalse($dm->has($namespace, 'inexistent'));
         assertNull($dm->get($namespace, 'inexistent'));
@@ -41,7 +34,7 @@ class FileAdapterTest extends \PHPUnit\Framework\TestCase
 
     public function testIfValuesAreProperlySetAndReveived(): void
     {
-        $dm = new FileAdapter(self::$cachePath);
+        $dm = new RedisAdapter(new RedisMock());
         $namespace = 'second';
         //empty store
         assertFalse($dm->has($namespace, 'foo'));
@@ -58,7 +51,7 @@ class FileAdapterTest extends \PHPUnit\Framework\TestCase
 
     public function testIfWeirdKeysAreHandledProperly(): void
     {
-        $dm = new FileAdapter(self::$cachePath);
+        $dm = new RedisAdapter(new RedisMock());
         $namespace = './looks/../like/hack';
         $key = 'dir://parent/../../${VAR}/key/../^%##$!@#$%^&*()';
         assertFalse($dm->has($namespace, $key));
@@ -70,7 +63,7 @@ class FileAdapterTest extends \PHPUnit\Framework\TestCase
 
     public function testTtls(): void
     {
-        $dm = new FileAdapter(self::$cachePath);
+        $dm = new RedisAdapter(new RedisMock());
         $namespace = 'ttls';
         $key = 'ttl-test';
         assertFalse($dm->has($namespace, $key));

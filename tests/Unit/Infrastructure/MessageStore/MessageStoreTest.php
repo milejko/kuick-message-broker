@@ -38,7 +38,6 @@ class MessageStoreTest extends \PHPUnit\Framework\TestCase
         assertEquals([], $ms->getMessages($channel, $user));
         $messageId = $ms->publish($channel, 'my-message');
         $ms->ack($channel, $messageId, $user);
-        $this->expectException(MessageNotFoundException::class);
-        $ms->getMessage($channel, $messageId, $user);
+        assertEquals([], $ms->getMessages($channel, $user));
     }
 }

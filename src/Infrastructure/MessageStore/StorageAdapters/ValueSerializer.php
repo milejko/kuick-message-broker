@@ -12,12 +12,12 @@ namespace KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters;
 
 class ValueSerializer
 {
-    public static function serialize(?string $value, int $ttl): string
+    public function serialize(?string $value, int $ttl): string
     {
         return json_encode([$value, time(), $ttl]);
     }
 
-    public static function unserialize(string $serializedValue): array
+    public function unserialize(string $serializedValue): array
     {
         $valueArray = json_decode($serializedValue, true);
         return ['message' => $valueArray[0], 'createTime' => $valueArray[1], 'ttl' => $valueArray[2]];

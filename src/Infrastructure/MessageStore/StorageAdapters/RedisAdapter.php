@@ -14,7 +14,7 @@ use Redis;
 
 class RedisAdapter implements StorageAdapterInterface
 {
-    public function __construct(private Redis $redis)
+    public function __construct(private Redis | RedisMinimalInterface $redis)
     {
     }
 
@@ -24,7 +24,7 @@ class RedisAdapter implements StorageAdapterInterface
         if (!$serializedValue) {
             return null;
         }
-        return ValueSerializer::unserialize($serializedValue);
+        return (new ValueSerializer())->unserialize($serializedValue);
     }
 
     public function set(string $namespace, string $key, ?string $value = null, int $ttl = self::MAX_TTL): self
@@ -32,7 +32,7 @@ class RedisAdapter implements StorageAdapterInterface
         if ($ttl > self::MAX_TTL) {
             throw new StorageAdapterException("TTL $ttl exceeds " . self::MAX_TTL);
         }
-        $this->redis->set($namespace . $key, ValueSerializer::serialize($value, $ttl), $ttl);
+        $this->redis->set($namespace . $key, (new ValueSerializer())->serialize($value, $ttl), $ttl);
         return $this;
     }
 
@@ -43,10 +43,10 @@ class RedisAdapter implements StorageAdapterInterface
 
     public function browseKeys(string $namespace, string $pattern = '*'): array
     {
-        $redisKeys = $this->redis->keys($namespace . $pattern);
-        array_walk($redisKeys, function (&$value, $key) use (&$redisKeys, $namespace) {
-            $redisKeys[$key] = substr($value, strlen($namespace));
-        });
-        return $redisKeys;
+        $keys = [];
+        foreach ($this->redis->keys($namespace . $pattern) as $key) {
+            $keys[] = substr($key, strlen($namespace));
+        }
+        return $keys;
     }
 }

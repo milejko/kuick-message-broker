@@ -31,7 +31,7 @@ class FileAdapter implements StorageAdapterInterface
             unset($error); //nothing to do
             return null;
         }
-        $value = ValueSerializer::unserialize($serializedValue);
+        $value = (new ValueSerializer())->unserialize($serializedValue);
         //expired
         if ((int) ($value['createTime'] + $value['ttl']) < time()) {
             return null;
@@ -45,7 +45,7 @@ class FileAdapter implements StorageAdapterInterface
             throw new StorageAdapterException("Specified ttl $ttl exceeds " . self::MAX_TTL);
         }
         $fileName = $this->getDataFolderName($namespace) . $this->encodeKey($key);
-        $serializedValue = ValueSerializer::serialize($value, $ttl);
+        $serializedValue = (new ValueSerializer())->serialize($value, $ttl);
         //try to write file, check and create data folder if failed
         try {
             file_put_contents($fileName, $serializedValue);

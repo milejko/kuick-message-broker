@@ -30,7 +30,8 @@ return [
     'kuick.mb.consumer.map' => 'example[]=user@pass',
     'kuick.mb.publisher.map' => 'example[]=user@pass',
 
-    'kuick.mb.storage.dsn' => 'file:///var/www/html/var/tmp/messages',
+    #'kuick.mb.storage.dsn' => 'file:///var/www/html/var/tmp/messages',
+    'kuick.mb.storage.dsn' => 'redis://127.0.0.1',
 
     StorageAdapterInterface::class => factory(StorageAdapterFactory::class),
 ];

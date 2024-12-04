@@ -8,3 +8,4 @@
 version.*
 composer.lock
 clover.xml
+/tests/var

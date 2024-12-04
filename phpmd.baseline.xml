@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
 <phpmd-baseline>
-  <violation rule="PHPMD\Rule\UnusedFormalParameter" file="src/Api/UI/HomeAction.php"/>
   <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Infrastructure/MessageStore/MessageStore.php"/>
-  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Infrastructure/MessageStore/StorageAdapters/FileAdapter.php"/>
-  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Infrastructure/MessageStore/StorageAdapters/RedisAdapter.php"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Infrastructure/MessageStore/StorageAdapters/StorageAdapterFactory.php"/>
 </phpmd-baseline>
