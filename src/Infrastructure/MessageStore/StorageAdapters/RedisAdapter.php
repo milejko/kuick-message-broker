@@ -10,11 +10,12 @@
 
 namespace KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters;
 
+use Kuick\Cache\Utils\RedisInterface;
 use Redis;
 
 class RedisAdapter implements StorageAdapterInterface
 {
-    public function __construct(private Redis | RedisMinimalInterface $redis)
+    public function __construct(private Redis | RedisInterface $redis)
     {
     }
 

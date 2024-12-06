@@ -7,32 +7,17 @@ on:
   push:
     tags:
       - "v*.*.*"
-  workflow_dispatch:
 
 jobs:
   Testing:
-    strategy:
-      matrix:
-        version: ['8.2', '8.3']
-      fail-fast: true
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    - name: Build docker image
-      uses: docker/build-push-action@v5
-      with:
-        push: false
-        target: test-runner
-        tags: php${{ matrix.version }}-checks
-        build-args: PHP_VERSION=${{ matrix.version }}
-    - name: Run tests
-      run: docker run --rm -v ./:/var/www/html/public/build php${{ matrix.version }}-checks sh -c "composer test:all"
+    uses: milejko/kuick-message-broker/.github/workflows/ci.yml@main
 
   Deploy:
     needs: Testing
     strategy:
       matrix:
+        # Noble is not available because of a curl arm64 bug:
+        # https://bugs.launchpad.net/ubuntu/+source/curl/+bug/2073448
         os-variant: ['jammy', 'bookworm', 'alpine']
       fail-fast: false
     runs-on: ubuntu-latest
@@ -41,16 +26,6 @@ jobs:
     - 
       name: Checkout code
       uses: actions/checkout@v4
-    - 
-      name: Build testing Docker Image
-      uses: docker/build-push-action@v5
-      with:
-        push: false
-        file: ./Dockerfile
-        context: ./
-        target: dist
-        tags: testing
-        build-args: OS_VARIANT=${{ matrix.os-variant }}
     - 
       name: Set up QEMU (multiplatform)
       uses: docker/setup-qemu-action@v3
@@ -68,7 +43,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ secrets.DOCKERHUB_USERNAME }}/message-broker
+        images: kuickphp/message-broker
         tags: |
           type=raw,value=${{ matrix.os-variant }}
           type=semver,pattern={{version}},suffix=-${{ matrix.os-variant }}

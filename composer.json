@@ -12,8 +12,7 @@
     ],
     "require": {
         "php": ">=8.2.0",
-        "kuick/framework": "^1.0",
-        "nyholm/dsn": "^2.0"
+        "kuick/framework": "^1.0"
     },
     "scripts": {
         "fix:phpcbf": "phpcbf",

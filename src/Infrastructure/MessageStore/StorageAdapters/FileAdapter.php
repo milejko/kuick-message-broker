@@ -18,7 +18,7 @@ class FileAdapter implements StorageAdapterInterface
 {
     private const GC_DIVISOR = 100;
 
-    public function __construct(private string $path)
+    public function __construct(private string $path, private int $gcDivisor = self::GC_DIVISOR)
     {
     }
 
@@ -110,7 +110,7 @@ class FileAdapter implements StorageAdapterInterface
 
     private function gc(string $namespace): void
     {
-        if (rand(0, self::GC_DIVISOR) != 0) {
+        if (rand(0, $this->gcDivisor) != 0) {
             return;
         }
         //GlobIterator is the best performing directory browser for PHP

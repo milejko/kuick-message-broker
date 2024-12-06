@@ -15,6 +15,7 @@ use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapte
 use Symfony\Component\Filesystem\Filesystem;
 
 use function PHPUnit\Framework\assertArrayHasKey;
+use function PHPUnit\Framework\assertArrayNotHasKey;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertNull;
@@ -41,7 +42,8 @@ class FileAdapterTest extends \PHPUnit\Framework\TestCase
 
     public function testIfValuesAreProperlySetAndReveived(): void
     {
-        $dm = new FileAdapter(self::$cachePath);
+        //with gc_divisor = 0
+        $dm = new FileAdapter(self::$cachePath, 0);
         $namespace = 'second';
         //empty store
         assertFalse($dm->has($namespace, 'foo'));
@@ -77,6 +79,7 @@ class FileAdapterTest extends \PHPUnit\Framework\TestCase
         $dm->set($namespace, $key, 'value', 1);
         sleep(2);
         assertFalse($dm->has($namespace, $key));
+        assertArrayNotHasKey($key, $dm->browseKeys($namespace));
         $this->expectException(StorageAdapterException::class);
         $dm->set($namespace, $key, 'data', 1234567890);
     }

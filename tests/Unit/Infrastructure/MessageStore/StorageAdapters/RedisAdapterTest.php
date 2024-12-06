@@ -12,11 +12,10 @@ namespace Tests\KuickMessageBroker\Unit\Infrastructure\MessageStore\StorageAdapt
 
 use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\RedisAdapter;
 use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterException;
-use Redis;
-use Tests\KuickMessageBroker\Mocks\InMemoryStorageAdapterMock;
 use Tests\KuickMessageBroker\Mocks\RedisMock;
 
 use function PHPUnit\Framework\assertArrayHasKey;
+use function PHPUnit\Framework\assertArrayNotHasKey;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertNull;
@@ -70,6 +69,7 @@ class RedisAdapterTest extends \PHPUnit\Framework\TestCase
         $dm->set($namespace, $key, 'value', 1);
         sleep(2);
         assertFalse($dm->has($namespace, $key));
+        assertArrayNotHasKey($key, $dm->browseKeys($namespace));
         $this->expectException(StorageAdapterException::class);
         $dm->set($namespace, $key, 'data', 1234567890);
     }

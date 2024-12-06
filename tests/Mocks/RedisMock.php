@@ -8,11 +8,11 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-namespace Tests\KuickMessageBroker\Mocks;
+ namespace Tests\KuickMessageBroker\Mocks;
 
-use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\RedisMinimalInterface;
+use Kuick\Cache\Utils\RedisInterface;
 
-class RedisMock implements RedisMinimalInterface
+class RedisMock implements RedisInterface
 {
     private array $storage = [];
     private array $createTimes = [];
@@ -23,21 +23,43 @@ class RedisMock implements RedisMinimalInterface
         return $this->exists($key) ? $this->storage[$key] : null;
     }
 
-    public function set(string $key, ?string $value = null, int $ttl = 0): self
+    public function set(string $key, ?string $value = null, int $ttl = 0): bool
     {
         $this->storage[$key] = $value;
         $this->createTimes[$key] = time();
         $this->ttls[$key] = $ttl;
-        return $this;
+        return true;
+    }
+
+    public function del(string $key): bool
+    {
+        unset($this->createTimes[$key]);
+        unset($this->storage[$key]);
+        unset($this->ttls[$key]);
+        return true;
+    }
+
+    public function flushDb(bool $sync = false): bool
+    {
+        $this->createTimes = $this->storage = $this->ttls = [];
+        return true;
+    }
+
+    public function flushAll(bool $sync = false): bool
+    {
+        return $this->flushDb();
     }
 
     public function exists(string $key): bool
     {
-        if (!isset($this->ttls[$key]) || !isset($this->storage[$key]) || !isset($this->createTimes[$key])) {
+        if (!array_key_exists($key, $this->ttls) ||
+            !array_key_exists($key, $this->storage) ||
+            !array_key_exists($key, $this->createTimes)) {
             return false;
         }
+        $ttl = ($this->ttls[$key] == 0) ? 10000000 : $this->ttls[$key];
         //failed ttl
-        if ($this->ttls[$key] + $this->createTimes[$key] <= time()) {
+        if ((int) ($ttl + $this->createTimes[$key]) <= time()) {
             return false;
         }
         return $this->storage[$key];
@@ -47,7 +69,7 @@ class RedisMock implements RedisMinimalInterface
     {
         $keys = [];
         foreach (array_keys($this->storage) as $key) {
-            if (null === $this->exists($key)) {
+            if (!$this->exists($key)) {
                 continue;
             }
             $keys[] = $key;
