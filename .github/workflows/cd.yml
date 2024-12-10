@@ -16,9 +16,9 @@ jobs:
     needs: Testing
     strategy:
       matrix:
-        # Noble is not available because of a curl arm64 bug:
+        # Ubuntu Noble is not available for now, because of a curl arm64 bug:
         # https://bugs.launchpad.net/ubuntu/+source/curl/+bug/2073448
-        os-variant: ['noble', 'jammy', 'bookworm', 'alpine']
+        os-variant: ['jammy', 'bookworm', 'alpine']
       fail-fast: false
     runs-on: ubuntu-latest
 
@@ -64,4 +64,6 @@ jobs:
         target: dist
         tags: ${{ steps.meta.outputs.tags }},
         labels: ${{ steps.meta.outputs.labels }},
-        build-args: OS_VARIANT=${{ matrix.os-variant }}
+        build-args: |
+          PHP_VERSION=8.3
+          OS_VARIANT=${{ matrix.os-variant }}
