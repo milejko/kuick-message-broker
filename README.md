@@ -7,7 +7,7 @@
 [![codecov](https://codecov.io/gh/milejko/kuick-message-broker/graph/badge.svg?token=80QEBDHGPH)](https://codecov.io/gh/milejko/kuick-message-broker)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 
-A small, fast message broker with dedicated publisher based on Kuick(https://github.com/milejko/kuick).
+A small, fast message broker with dedicated publisher based on Kuick Framework (https://github.com/milejko/kuick).
 Communication is handled via JSON-API, see some examples below.
 
 ## Requirements
