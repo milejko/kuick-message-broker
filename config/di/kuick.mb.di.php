@@ -11,6 +11,7 @@
 use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterFactory;
 use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterInterface;
 
+use function DI\env;
 use function DI\factory;
 
 /**
@@ -18,20 +19,12 @@ use function DI\factory;
  * @see https://php-di.org/doc/php-definitions.html
  */
 return [
-    'kuick.app.name'      => 'Kuick.MB',
-    // Kuick defaults
-    // 'kuick.app.charset'   => 'UTF-8',
-    // 'kuick.app.locale'    => 'en_US.utf-8',
-    // 'kuick.app.timezone'  => 'UTC',
+    'kuick.app.name'      => env('KUICK_APP_NAME', 'Kuick.MB'),
 
-    //disable valid token
-    'kuick.ops.guard.token' => '',
+    'kuick.mb.consumer.map' => env('KUICK_MB_CONSUMER_MAP', 'example[]=user@pass'),
+    'kuick.mb.publisher.map' => env('KUICK_MB_PUBLISHER_MAP', 'example[]=user@pass'),
 
-    'kuick.mb.consumer.map' => 'example[]=user@pass',
-    'kuick.mb.publisher.map' => 'example[]=user@pass',
-
-    #'kuick.mb.storage.dsn' => 'file:///var/www/html/var/tmp/messages',
-    'kuick.mb.storage.dsn' => 'redis://127.0.0.1',
+    'kuick.mb.storage.dsn' => env('KUICK_MB_STORAGE_DSN', 'redis://127.0.0.1'),
 
     StorageAdapterInterface::class => factory(StorageAdapterFactory::class),
 ];

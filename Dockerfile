@@ -14,21 +14,16 @@ FROM milejko/php:${PHP_VERSION}-${SERVER_VARIANT}-${OS_VARIANT} AS base
 ###################################################################
 FROM base AS dist
 
-# Important performance hint:
-# KUICK_APP_ENV=prod should be defined here, or via environment variables
-# .env* files shouldn't be used in production
-ENV KUICK_APP_ENV=prod \
-    KUICK_APP_NAME=Kuick.MB
+ENV KUICK_APP_NAME=KuickMB
 
-COPY --link ./etc/apache2 /etc/apache2
-COPY --link etc ./etc
-COPY --link public ./public
+COPY --link etc/apache2 /etc/apache2
+COPY --link config config
+COPY --link public public
 COPY --link composer.dist.json composer.json
-COPY --link version.* ./public/
-
-RUN mkdir -m 777 var
+COPY --link version.* public/
 
 RUN set -eux; \
+    mkdir -m 777 var; \
     composer install \ 
     --prefer-dist \
     --no-dev \

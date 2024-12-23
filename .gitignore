@@ -1,11 +1,11 @@
-.phpunit*
+clover.xml
 /.idea
 /.php*
 /vendor/
+.env*local
 .DS_Store
 /public/build*
 /var
 version.*
 composer.lock
-clover.xml
 /tests/var
