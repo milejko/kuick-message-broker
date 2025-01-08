@@ -30,7 +30,7 @@ class StorageAdapterFactoryTest extends \PHPUnit\Framework\TestCase
         $redis = (new StorageAdapterFactory('file:///tmp'))();
         assertInstanceOf(FileAdapter::class, $redis);
     }
-    
+
     public function testIfUnsupportedAdapterThrowsException(): void
     {
         $this->expectExceptionMessage('DSN invalid');

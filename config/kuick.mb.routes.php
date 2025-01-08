@@ -8,26 +8,13 @@
  * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
  */
 
-use Kuick\Ops\Security\OpsGuard;
-use Kuick\Ops\UI\OpsController;
 use KuickMessageBroker\Api\Security\TokenGuard;
 use KuickMessageBroker\Api\UI\GetMessageController;
 use KuickMessageBroker\Api\UI\GetMessagesController;
-use KuickMessageBroker\Api\UI\HomeController;
 use KuickMessageBroker\Api\UI\PostMessageAckController;
 use KuickMessageBroker\Api\UI\PostMessageController;
 
 return [
-    //this route is protected by Bearer Token (see the DI configuration files, and the OpsGuard)
-    [
-        'path' => '/api/ops',
-        'controller' => OpsController::class,
-        'guards' => [OpsGuard::class]
-    ],
-    [
-        'path' => '/',
-        'controller' => HomeController::class
-    ],
     [
         'path' => '/api/message/(?<channel>[a-zA-Z0-9]+)/(?<messageId>[a-z0-9]{32})',
         'controller' => GetMessageController::class,

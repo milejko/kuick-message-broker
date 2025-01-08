@@ -10,13 +10,15 @@
 
 namespace KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters;
 
-use Kuick\Cache\Utils\RedisInterface;
+use Kuick\Redis\RedisInterface;
 use Redis;
 
 class RedisAdapter implements StorageAdapterInterface
 {
-    public function __construct(private Redis | RedisInterface $redis)
-    {
+    public function __construct(
+        private Redis | RedisInterface $redis,
+        private ValueSerializer $serializer = new ValueSerializer(),
+    ) {
     }
 
     public function get(string $namespace, string $key): ?array
@@ -25,7 +27,7 @@ class RedisAdapter implements StorageAdapterInterface
         if (!$serializedValue) {
             return null;
         }
-        return (new ValueSerializer())->unserialize($serializedValue);
+        return $this->serializer->unserialize($serializedValue);
     }
 
     public function set(string $namespace, string $key, ?string $value = null, int $ttl = self::MAX_TTL): self
@@ -33,7 +35,7 @@ class RedisAdapter implements StorageAdapterInterface
         if ($ttl > self::MAX_TTL) {
             throw new StorageAdapterException("TTL $ttl exceeds " . self::MAX_TTL);
         }
-        $this->redis->set($namespace . $key, (new ValueSerializer())->serialize($value, $ttl), $ttl);
+        $this->redis->set($namespace . $key, $this->serializer->serialize($value, $ttl), $ttl);
         return $this;
     }
 

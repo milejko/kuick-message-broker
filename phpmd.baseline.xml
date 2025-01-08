@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<phpmd-baseline>
-  <violation rule="PHPMD\Rule\CleanCode\BooleanArgumentFlag" file="src/Infrastructure/MessageStore/MessageStore.php"/>
-  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Infrastructure/MessageStore/StorageAdapters/StorageAdapterFactory.php"/>
-</phpmd-baseline>

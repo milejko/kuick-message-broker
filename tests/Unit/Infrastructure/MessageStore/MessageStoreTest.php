@@ -23,11 +23,6 @@ class MessageStoreTest extends \PHPUnit\Framework\TestCase
         assertCount(1, $ms->getMessages($channel, $user));
         assertEquals('my-message', $ms->getMessage($channel, $messageId, $user)['message']);
         assertEquals(300, $ms->getMessage($channel, $messageId, $user)['ttl']);
-        //same message with auto ack
-        assertEquals('my-message', $ms->getMessage($channel, $messageId, $user, true)['message']);
-        //now message should not be found
-        $this->expectException(MessageNotFoundException::class);
-        $ms->getMessage($channel, $messageId, $user);
     }
 
     public function testIfAckedMessagesDissapear(): void

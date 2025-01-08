@@ -11,7 +11,7 @@
 namespace KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters;
 
 use DI\Attribute\Inject;
-use Kuick\Cache\Utils\RedisClientFactory;
+use Kuick\Redis\RedisClientFactory;
 use Nyholm\Dsn\DsnParser;
 
 class StorageAdapterFactory
@@ -20,6 +20,9 @@ class StorageAdapterFactory
     {
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function __invoke(): StorageAdapterInterface
     {
         $dsn = DsnParser::parse($this->dsnString);

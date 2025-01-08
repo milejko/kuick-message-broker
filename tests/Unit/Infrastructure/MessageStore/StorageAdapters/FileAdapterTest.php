@@ -43,7 +43,7 @@ class FileAdapterTest extends \PHPUnit\Framework\TestCase
     public function testIfValuesAreProperlySetAndReveived(): void
     {
         //with gc_divisor = 0
-        $dm = new FileAdapter(self::$cachePath, 0);
+        $dm = new FileAdapter(self::$cachePath);
         $namespace = 'second';
         //empty store
         assertFalse($dm->has($namespace, 'foo'));

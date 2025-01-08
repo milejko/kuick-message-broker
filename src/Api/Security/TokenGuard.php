@@ -11,14 +11,13 @@
 namespace KuickMessageBroker\Api\Security;
 
 use DI\Attribute\Inject;
-use Kuick\Http\BadRequestException;
 use Kuick\Http\ForbiddenException;
-use Kuick\Http\RequestMethods;
 use Kuick\Http\UnauthorizedException;
-use Kuick\Security\GuardInterface;
+use OpenApi\Attributes\SecurityScheme;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
+#[SecurityScheme(securityScheme: 'Bearer Token', type: 'http', scheme: 'bearer')]
 class TokenGuard
 {
     public const TOKEN_HEADER = 'Authorization';
@@ -39,7 +38,7 @@ class TokenGuard
             throw new UnauthorizedException('Token is missing');
         }
         $requestToken = substr($bearerHeader, strlen(self::BEARER_PREFIX));
-        if (RequestMethods::GET == $request->getMethod()) {
+        if ('GET' == $request->getMethod()) {
             $this->validateToken($this->consumerTokenMap, $requestToken, $channel);
             return;
         }

@@ -48,17 +48,14 @@ class MessageStore
         return $messages;
     }
 
-    public function getMessage(string $channel, string $messageId, string $userToken, bool $autoack = false): array
+    public function getMessage(string $channel, string $messageId, string $userToken): array
     {
         $message = $this->storageAdapter->get($this->getMessageNamespace($channel), $messageId);
         //no message, or already acked
         if (null === $message || $this->isAcked($channel, $messageId, $userToken)) {
             throw new MessageNotFoundException();
         }
-        if ($autoack) {
-            $this->ack($channel, $messageId, $userToken);
-        }
-        return $message + ['messageId' => $messageId, 'acked' => $autoack];
+        return $message + ['messageId' => $messageId];
     }
 
     public function ack(string $channel, string $messageId, string $userToken): void

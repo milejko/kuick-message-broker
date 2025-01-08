@@ -4,15 +4,14 @@
   cacheResultFile="public/build/.phpunit.cache/test-results"
   xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
   colors="true">
-  <coverage cacheDirectory="public/build/.phpunit.cache/code-coverage" processUncoveredFiles="true">
-    <include>
-      <directory suffix=".php">./src</directory>
-    </include>
-    <report>
-      <text outputFile="php://stdout"></text>
-      <html outputDirectory="public/build/phpunit" lowUpperBound="50" highLowerBound="80"/>
-      <clover outputFile="public/build/clover.xml" />
-    </report>
+  <coverage processUncoveredFiles="true">
+      <include>
+          <directory suffix=".php">src</directory>
+      </include>
+      <report>
+          <text outputFile="php://stdout"></text>
+          <clover outputFile="clover.xml"/>
+      </report>
   </coverage>
   <testsuites>
     <testsuite name="Kuick Message Broker Test Suite">

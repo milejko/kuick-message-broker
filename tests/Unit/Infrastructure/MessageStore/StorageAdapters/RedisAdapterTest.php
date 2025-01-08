@@ -10,9 +10,9 @@
 
 namespace Tests\KuickMessageBroker\Unit\Infrastructure\MessageStore\StorageAdapters;
 
+use Kuick\Redis\RedisMock;
 use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\RedisAdapter;
 use KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters\StorageAdapterException;
-use Tests\KuickMessageBroker\Mocks\RedisMock;
 
 use function PHPUnit\Framework\assertArrayHasKey;
 use function PHPUnit\Framework\assertArrayNotHasKey;

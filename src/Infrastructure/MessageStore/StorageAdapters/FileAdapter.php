@@ -18,8 +18,11 @@ class FileAdapter implements StorageAdapterInterface
 {
     private const GC_DIVISOR = 100;
 
-    public function __construct(private string $path, private int $gcDivisor = self::GC_DIVISOR)
-    {
+    public function __construct(
+        private string $path,
+        private int $gcDivisor = self::GC_DIVISOR,
+        private ValueSerializer $serializer = new ValueSerializer(),
+    ) {
     }
 
     public function get(string $namespace, string $key): ?array
@@ -31,7 +34,7 @@ class FileAdapter implements StorageAdapterInterface
             unset($error); //nothing to do
             return null;
         }
-        $value = (new ValueSerializer())->unserialize($serializedValue);
+        $value = $this->serializer->unserialize($serializedValue);
         //expired
         if ((int) ($value['createTime'] + $value['ttl']) < time()) {
             return null;
@@ -45,7 +48,7 @@ class FileAdapter implements StorageAdapterInterface
             throw new StorageAdapterException("Specified ttl $ttl exceeds " . self::MAX_TTL);
         }
         $fileName = $this->getDataFolderName($namespace) . $this->encodeKey($key);
-        $serializedValue = (new ValueSerializer())->serialize($value, $ttl);
+        $serializedValue = $this->serializer->serialize($value, $ttl);
         //try to write file, check and create data folder if failed
         try {
             file_put_contents($fileName, $serializedValue);
@@ -55,7 +58,7 @@ class FileAdapter implements StorageAdapterInterface
             file_put_contents($fileName, $serializedValue);
         }
         //garbage collector
-        $this->gc($namespace);
+        $this->garbageCollector($namespace);
         return $this;
     }
 
@@ -108,7 +111,7 @@ class FileAdapter implements StorageAdapterInterface
         }
     }
 
-    private function gc(string $namespace): void
+    private function garbageCollector(string $namespace): void
     {
         if (rand(0, $this->gcDivisor) != 0) {
             return;

@@ -10,12 +10,55 @@
 
 namespace KuickMessageBroker\Api\UI;
 
-use Kuick\Http\JsonResponse;
-use Kuick\Http\ResponseCodes;
+use Kuick\Http\Message\JsonResponse;
 use KuickMessageBroker\Infrastructure\MessageStore\MessageStore;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use OpenApi\Attributes as OAA;
 
+#[OAA\Post(
+    path: '/api/message/{channel}?ttl={ttl}',
+    description: 'Post message',
+    security: [['Bearer Token' => []]],
+    tags: ['api'],
+    parameters: [
+        new OAA\Parameter(
+            name: 'channel',
+            in: 'path',
+            required: true,
+            examples: [new OAA\Examples(example: 'example', value: 'example')]
+        ),
+        new OAA\Parameter(
+            name: 'ttl',
+            in: 'query',
+            required: false,
+            examples: [
+                new OAA\Examples(example: '300', value: '300')
+            ]
+        ),
+    ],
+    requestBody: new OAA\RequestBody(
+        required: false,
+        content: new OAA\JsonContent()
+    ),
+    responses: [
+        new OAA\Response(
+            response: 201,
+            description: 'Message created',
+            content: new OAA\JsonContent(properties: [
+                new OAA\Property(property: 'messageId', type: 'string'),
+            ])
+        ),
+        new OAA\Response(
+            response: 401,
+            description: 'Token is missing'
+        ),
+        new OAA\Response(
+            response: 403,
+            description: 'Token invalid'
+        ),
+    ]
+)]
 class PostMessageController
 {
     private const DEFAULT_MESSAGE_TTL = 300;
@@ -33,7 +76,7 @@ class PostMessageController
             [
                 'messageId' => $messageId
             ],
-            ResponseCodes::CREATED
+            JsonResponse::HTTP_CREATED
         );
     }
 }
