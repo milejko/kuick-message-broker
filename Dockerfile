@@ -40,14 +40,6 @@ ENV XDEBUG_ENABLE=1 \
     XDEBUG_MODE=coverage \
     KUICK_APP_ENV=dev
 
-COPY ./src ./src
-COPY ./tests ./tests
-COPY ./composer.json ./composer.json
-COPY ./php* .
-
-RUN set -eux; \
-    composer install
-
 ###################################################################
 # Dev server target                                               #
 ###################################################################
