@@ -10,6 +10,7 @@
 
 use Kuick\Framework\Config\RouteConfig;
 use Kuick\Http\Message\JsonResponse;
+use Kuick\Http\Message\RequestInterface;
 use KuickMessageBroker\Api\UI\GetMessageController;
 use KuickMessageBroker\Api\UI\GetMessagesController;
 use KuickMessageBroker\Api\UI\PostMessageAckController;
@@ -35,11 +36,11 @@ return [
     new RouteConfig(
         '/api/message/(?<channel>[a-zA-Z0-9-_]{2,64})',
         PostMessageController::class,
-        ['method' => 'POST'],
+        [RequestInterface::METHOD_POST],
     ),
     new RouteConfig(
-        '/api/message/ack/(?<channel>[a-zA-Z0-9-_]+)/(?<messageId>[a-z0-9]{32})',
+        '/api/ack/(?<channel>[a-zA-Z0-9-_]+)/(?<messageId>[a-z0-9]{32})',
         PostMessageAckController::class,
-        ['method' => 'POST'],
+        [RequestInterface::METHOD_POST],
     ),
 ];

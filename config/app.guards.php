@@ -13,5 +13,6 @@ use KuickMessageBroker\Api\Security\TokenGuard;
 
 // security configuration
 return [
-    new GuardConfig('/api/message(.+)?', TokenGuard::class),
+    new GuardConfig('/api/ack/(?<channel>[a-zA-Z0-9]+)(.+)?', TokenGuard::class),
+    new GuardConfig('/api/message[s]?/(?<channel>[a-zA-Z0-9]+)(.+)?', TokenGuard::class),
 ];

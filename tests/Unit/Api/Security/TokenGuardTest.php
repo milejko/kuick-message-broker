@@ -23,42 +23,42 @@ class TokenGuardTest extends \PHPUnit\Framework\TestCase
     public function testIfMissingTokenGivesUnauthorized(): void
     {
         $tg = self::createTokenGuard();
-        $serverRequest = new ServerRequest('GET', 'not-important');
-        $response = $tg('test', $serverRequest);
+        $serverRequest = new ServerRequest('GET', 'not-important?channel=test');
+        $response = $tg($serverRequest);
         $this->assertEquals(401, $response->getStatusCode());
     }
 
     public function testIfInvalidTokenGivesForbidden(): void
     {
         $tg = self::createTokenGuard();
-        $serverRequest = (new ServerRequest('GET', 'not-important'))
+        $serverRequest = (new ServerRequest('GET', 'not-important?channel=channel'))
             ->withAddedHeader('Authorization', 'invalid');
-        $response = $tg('channel', $serverRequest);
+        $response = $tg($serverRequest);
         $this->assertEquals(403, $response->getStatusCode());
     }
 
     public function testIfNoTokensForChannelGivesForbidden(): void
     {
         $tg = self::createTokenGuard();
-        $serverRequest = (new ServerRequest('GET', 'not-important'))
+        $serverRequest = (new ServerRequest('GET', 'not-important?channel=inexistent'))
             ->withAddedHeader('Authorization', 'Bearer some@user');
-        $response = $tg('inexistent', $serverRequest);
+        $response = $tg($serverRequest);
         $this->assertEquals(403, $response->getStatusCode());
     }
 
     public function testIfValidTokenPassesWithoutErrors(): void
     {
         $tg = self::createTokenGuard();
-        $serverRequest = (new ServerRequest('GET', 'not-important'))
+        $serverRequest = (new ServerRequest('GET', 'not-important?channel=channel'))
             ->withAddedHeader('Authorization', 'Bearer user1');
-        $this->assertNull($tg('channel', $serverRequest));
+        $this->assertNull($tg($serverRequest));
     }
 
     public function testIfValidTokenPassesWithoutErrorsForPost(): void
     {
         $tg = self::createTokenGuard();
-        $serverRequest = (new ServerRequest('POST', 'not-important'))
+        $serverRequest = (new ServerRequest('POST', 'not-important?channel=channel'))
             ->withAddedHeader('Authorization', 'Bearer puser1');
-        $this->assertNull($tg('channel', $serverRequest));
+        $this->assertNull($tg($serverRequest));
     }
 }
