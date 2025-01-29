@@ -2,15 +2,9 @@
 
 namespace Tests\KuickMessageBroker\Unit\Api\Security;
 
-use Kuick\Http\BadRequestException;
-use Kuick\Http\ForbiddenException;
-use Kuick\Http\UnauthorizedException;
 use KuickMessageBroker\Api\Security\TokenGuard;
 use Nyholm\Psr7\ServerRequest;
 use Psr\Log\NullLogger;
-
-use function PHPUnit\Framework\assertEmpty;
-use function PHPUnit\Framework\assertTrue;
 
 class TokenGuardTest extends \PHPUnit\Framework\TestCase
 {
@@ -30,9 +24,8 @@ class TokenGuardTest extends \PHPUnit\Framework\TestCase
     {
         $tg = self::createTokenGuard();
         $serverRequest = new ServerRequest('GET', 'not-important');
-        $this->expectException(UnauthorizedException::class);
-        $this->expectExceptionMessage('Token is missing');
-        $tg('test', $serverRequest);
+        $response = $tg('test', $serverRequest);
+        $this->assertEquals(401, $response->getStatusCode());
     }
 
     public function testIfInvalidTokenGivesForbidden(): void
@@ -40,14 +33,8 @@ class TokenGuardTest extends \PHPUnit\Framework\TestCase
         $tg = self::createTokenGuard();
         $serverRequest = (new ServerRequest('GET', 'not-important'))
             ->withAddedHeader('Authorization', 'invalid');
-        $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('Token is invalid');
-        $tg('channel', $serverRequest);
-        $serverRequest = (new ServerRequest('POST', 'not-important'))
-            ->withAddedHeader('Authorization', 'invalid');
-        $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('Token is invalid');
-        $tg('channel', $serverRequest);
+        $response = $tg('channel', $serverRequest);
+        $this->assertEquals(403, $response->getStatusCode());
     }
 
     public function testIfNoTokensForChannelGivesForbidden(): void
@@ -55,9 +42,8 @@ class TokenGuardTest extends \PHPUnit\Framework\TestCase
         $tg = self::createTokenGuard();
         $serverRequest = (new ServerRequest('GET', 'not-important'))
             ->withAddedHeader('Authorization', 'Bearer some@user');
-        $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessage('No tokens found for this channel: inexistent');
-        $tg('inexistent', $serverRequest);
+        $response = $tg('inexistent', $serverRequest);
+        $this->assertEquals(403, $response->getStatusCode());
     }
 
     public function testIfValidTokenPassesWithoutErrors(): void
@@ -65,11 +51,14 @@ class TokenGuardTest extends \PHPUnit\Framework\TestCase
         $tg = self::createTokenGuard();
         $serverRequest = (new ServerRequest('GET', 'not-important'))
             ->withAddedHeader('Authorization', 'Bearer user1');
-        $tg('channel', $serverRequest);
+        $this->assertNull($tg('channel', $serverRequest));
+    }
+
+    public function testIfValidTokenPassesWithoutErrorsForPost(): void
+    {
         $tg = self::createTokenGuard();
         $serverRequest = (new ServerRequest('POST', 'not-important'))
-            ->withAddedHeader('Authorization', 'Bearer puser3');
-        $tg('channel2', $serverRequest);
-        assertTrue(true);
+            ->withAddedHeader('Authorization', 'Bearer puser1');
+        $this->assertNull($tg('channel', $serverRequest));
     }
 }

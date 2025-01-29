@@ -1,8 +1,8 @@
 {
     "name": "kuick/message-broker",
-    "type": "library",
+    "type": "application",
     "description": "Small, slim message broker based on Kuick",
-    "keywords": ["message broker", "Kuick"],
+    "keywords": ["message broker", "kuick"],
     "license": "MIT",
     "authors": [
         {
@@ -12,8 +12,7 @@
     ],
     "require": {
         "php": ">=8.2.0",
-        "kuick/framework": "^1.3",
-        "kuick/redis": "^1.0"
+        "kuick/framework": "^2.2"
     },
     "scripts": {
         "fix:phpcbf": "phpcbf --standard=PSR12 src tests",
@@ -38,13 +37,7 @@
             "Tests\\KuickMessageBroker\\": "tests"
         }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        }
-    },
     "require-dev": {
         "kuick/qa-toolkit": "^1.0"
-    },
-    "minimum-stability": "beta"
+    }
 }

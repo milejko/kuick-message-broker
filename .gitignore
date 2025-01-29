@@ -4,7 +4,7 @@ clover.xml
 /vendor/
 .env*local
 .DS_Store
-/public/build*
+.phpunit
 /var
 version.*
 composer.lock

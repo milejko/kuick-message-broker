@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
   bootstrap="tests/phpunit-bootstrap.php" 
-  cacheResultFile="public/build/.phpunit.cache/test-results"
+  cacheResultFile=".phpunit/phpunit.result.cache"
   xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
   colors="true">
   <coverage processUncoveredFiles="true">
@@ -9,7 +9,8 @@
           <directory suffix=".php">src</directory>
       </include>
       <report>
-          <text outputFile="php://stdout"></text>
+          <text outputFile="php://stdout" />
+          <html outputDirectory=".phpunit" />
           <clover outputFile="clover.xml"/>
       </report>
   </coverage>

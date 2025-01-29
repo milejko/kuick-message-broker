@@ -66,8 +66,11 @@ class PostMessageAckController
     {
     }
 
-    public function __invoke(string $channel, string $messageId, ServerRequestInterface $request): JsonResponse
+    public function __invoke(ServerRequestInterface $request): JsonResponse
     {
+        $channel = $request->getQueryParams()['channel'] ?? '';
+        $messageId = $request->getQueryParams()['messageId'] ?? '';
+
         $userToken = $request->getHeaderLine(TokenGuard::TOKEN_HEADER);
         try {
             $this->store->ack(
@@ -77,7 +80,7 @@ class PostMessageAckController
             );
             $this->logger->info('Acked message: ' . $messageId . ' by user: ' . md5($userToken));
         } catch (MessageNotFoundException $error) {
-            throw new NotFoundException($error->getMessage());
+            return new JsonResponse(['message' => $error->getMessage()], JsonResponse::HTTP_NOT_FOUND);
         }
         return new JsonResponse(
             [

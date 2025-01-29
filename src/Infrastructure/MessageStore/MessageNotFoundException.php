@@ -10,9 +10,9 @@
 
 namespace KuickMessageBroker\Infrastructure\MessageStore;
 
-use Kuick\App\AppException;
+use Exception;
 
-class MessageNotFoundException extends AppException
+class MessageNotFoundException extends Exception
 {
     protected $message = 'Message not found';
 }
