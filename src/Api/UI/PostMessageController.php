@@ -67,9 +67,11 @@ class PostMessageController
     {
     }
 
-    public function __invoke(string $channel, ServerRequestInterface $request): JsonResponse
+    public function __invoke(ServerRequestInterface $request): JsonResponse
     {
+        $channel = $request->getQueryParams()['channel'] ?? '';
         $ttl = $request->getQueryParams()['ttl'] ?? self::DEFAULT_MESSAGE_TTL;
+
         $messageId = $this->store->publish($channel, $request->getBody()->getContents(), (int) $ttl > 0 ? $ttl : self::DEFAULT_MESSAGE_TTL);
         $this->logger->info('Published message: ' . $messageId);
         return new JsonResponse(

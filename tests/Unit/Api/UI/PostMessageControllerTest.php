@@ -16,9 +16,9 @@ class PostMessageControllerTest extends \PHPUnit\Framework\TestCase
     public function testStandardFlow(): void
     {
         $store = new MessageStore(new InMemoryStorageAdapterMock());
-        $request = new ServerRequest('GET', 'whatever');
-        $response = (new PostMessageController($store, new NullLogger()))('test', $request);
-        assertEquals(201, $response->getStatusCode());
-        assertArrayHasKey('messageId', json_decode($response->getBody()->getContents(), true));
+        $request = new ServerRequest('GET', 'whatever?channel=test');
+        $response = (new PostMessageController($store, new NullLogger()))($request);
+        $this->assertEquals(201, $response->getStatusCode());
+        $this->assertArrayHasKey('messageId', json_decode($response->getBody()->getContents(), true));
     }
 }

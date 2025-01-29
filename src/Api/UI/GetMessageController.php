@@ -15,6 +15,7 @@ use Kuick\Http\NotFoundException;
 use KuickMessageBroker\Api\Security\TokenGuard;
 use KuickMessageBroker\Infrastructure\MessageStore\MessageNotFoundException;
 use KuickMessageBroker\Infrastructure\MessageStore\MessageStore;
+use Nyholm\Psr7\ServerRequest;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use OpenApi\Attributes as OAA;
@@ -72,10 +73,13 @@ class GetMessageController
     {
     }
 
-    public function __invoke(string $channel, string $messageId, ServerRequestInterface $request): JsonResponse
+    public function __invoke(ServerRequestInterface $request): JsonResponse
     {
-        $userToken = $request->getHeaderLine(TokenGuard::TOKEN_HEADER);
+        $channel = $request->getQueryParams()['channel'] ?? '';
+        $messageId = $request->getQueryParams()['messageId'] ?? '';
         $autoAck = $request->getQueryParams()['autoack'] ?? false;
+        $userToken = $request->getHeaderLine(TokenGuard::TOKEN_HEADER);
+
         $autoAck = 1 == $autoAck || 'true' === $autoAck;
         $this->logger->notice(sprintf(self::LOG_MESSAGE_TEMPLATE, $messageId, $channel, substr($userToken, 7, 5), (int)$autoAck));
         try {
@@ -86,7 +90,7 @@ class GetMessageController
             );
             $autoAck && $this->store->ack($channel, $messageId, $userToken);
         } catch (MessageNotFoundException $error) {
-            throw new NotFoundException($error->getMessage());
+            return new JsonResponse(['message' => $error->getMessage()], JsonResponse::HTTP_NOT_FOUND);
         }
         return new JsonResponse($message + ['acked' => $autoAck]);
     }

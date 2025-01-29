@@ -61,8 +61,9 @@ class GetMessagesController
     {
     }
 
-    public function __invoke(string $channel, ServerRequestInterface $request): JsonResponse
+    public function __invoke(ServerRequestInterface $request): JsonResponse
     {
+        $channel = $request->getQueryParams()['channel'] ?? '';
         $userToken = $request->getHeaderLine(TokenGuard::TOKEN_HEADER);
         $messages = $this->store->getMessages(
             $channel,

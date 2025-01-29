@@ -1,25 +1,37 @@
 <?php
 
 /**
- * Kuick Framework (https://github.com/milejko/kuick)
+ * Kuick Framework (https://github.com/milejko/kuick-message-broker)
  *
- * @link       https://github.com/milejko/kuick
- * @copyright  Copyright (c) 2010-2024 Mariusz Miłejko (mariusz@milejko.pl)
- * @license    https://en.wikipedia.org/wiki/BSD_licenses New BSD License
+ * @link       https://github.com/milejko/kuick-framework
+ * @copyright  Copyright (c) 2010-2025 Mariusz Miłejko (mariusz@milejko.pl)
+ * @license    https://github.com/milejko/kuick-message-broker?tab=MIT-1-ov-file#readme New BSD License
  */
 
-use Kuick\App\JsonKernel;
+use Kuick\Framework\Events\RequestReceivedEvent;
+use Kuick\Framework\Kernel;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 $projectDir = dirname(__DIR__);
 require $projectDir . '/vendor/autoload.php';
 
+// Using .env loader is not recommended from the performance perspective
+// uncomment the line below if you really want to use it
+// @TODO: comment the line below
+Kuick\Dotenv\DotEnvLoader::fromDirectory($projectDir);
+
 $psr17Factory = new Psr17Factory();
 
-(new JsonKernel($projectDir))((new ServerRequestCreator(
+$request = (new ServerRequestCreator(
     $psr17Factory, // ServerRequestFactory
     $psr17Factory, // UriFactory
     $psr17Factory, // UploadedFileFactory
-    $psr17Factory  // StreamFactory
-))->fromGlobals());
+    $psr17Factory, // StreamFactory
+))->fromGlobals();
+
+(new Kernel($projectDir))
+    ->getContainer()
+        ->get(EventDispatcherInterface::class)
+            ->dispatch(new RequestReceivedEvent($request));

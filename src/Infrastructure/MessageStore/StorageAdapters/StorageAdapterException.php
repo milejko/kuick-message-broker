@@ -10,8 +10,8 @@
 
 namespace KuickMessageBroker\Infrastructure\MessageStore\StorageAdapters;
 
-use Kuick\App\AppException;
+use Exception;
 
-class StorageAdapterException extends AppException
+class StorageAdapterException extends Exception
 {
 }
