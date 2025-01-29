@@ -14,5 +14,5 @@ return [
     'kuick.mb.consumer.map' => env('KUICK_MB_CONSUMER_MAP', 'example[]=user@pass'),
     'kuick.mb.publisher.map' => env('KUICK_MB_PUBLISHER_MAP', 'example[]=user@pass'),
 
-    'kuick.mb.storage.dsn' => env('KUICK_MB_STORAGE_DSN', 'redis://127.0.0.1'),
+    'kuick.mb.storage.dsn' => env('KUICK_MB_STORAGE_DSN', 'file:///var/www/html/var/storage'),
 ];
